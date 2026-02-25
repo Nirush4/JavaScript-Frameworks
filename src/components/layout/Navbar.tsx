@@ -11,51 +11,64 @@ import {
   rem,
 } from '@mantine/core';
 import { IconSearch, IconUser, IconShoppingBag } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export default function Navbar() {
   const [opened, setOpened] = useState(false);
 
+  const toggleDrawer = () => setOpened((o) => !o);
+
   const navLinks = (
     <>
-      <Text
-        component={Link}
-        to='/women'
-        fw={500}
-        style={{ textDecoration: 'none', color: 'black' }}
+      <NavLink
+        to='/'
+        className={({ isActive }) =>
+          `text-black no-underline  ${
+            isActive ? 'text-blue-500 font-bold text-lg' : ''
+          }`
+        }
       >
-        Women
-      </Text>
-      <Text
-        component={Link}
-        to='/men'
-        fw={500}
-        style={{ textDecoration: 'none', color: 'black' }}
+        Home
+      </NavLink>
+
+      <NavLink
+        to='/products'
+        className={({ isActive }) =>
+          `text-black no-underline ${
+            isActive ? 'text-blue-500 font-bold text-lg' : ''
+          }`
+        }
       >
-        Men
-      </Text>
-      <Text
-        component={Link}
-        to='/new'
-        fw={500}
-        style={{ textDecoration: 'none', color: 'black' }}
+        Products
+      </NavLink>
+      <NavLink
+        to='/about'
+        className={({ isActive }) =>
+          `text-black no-underline ${
+            isActive ? 'text-blue-500 font-bold text-lg' : ''
+          }`
+        }
       >
-        New
-      </Text>
-      <Text
-        component={Link}
-        to='/sale'
-        fw={500}
-        style={{ textDecoration: 'none', color: 'black' }}
+        About
+      </NavLink>
+
+      <NavLink
+        to='/contact'
+        className={({ isActive }) =>
+          `text-black no-underline ${
+            isActive ? 'text-blue-500 font-bold text-lg' : ''
+          }`
+        }
       >
-        Sale
-      </Text>
+        Contact
+      </NavLink>
     </>
   );
 
   return (
     <>
       <AppShell.Header
+        component='header'
         style={{
           backgroundColor: 'white',
           borderBottom: '1px solid #eee',
@@ -63,8 +76,8 @@ export default function Navbar() {
       >
         <Container
           size='lg'
+          h='100%'
           style={{
-            height: '100%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -72,17 +85,20 @@ export default function Navbar() {
         >
           <Burger
             opened={opened}
-            onClick={() => setOpened(!opened)}
+            onClick={toggleDrawer}
             hiddenFrom='sm'
             size='sm'
+            aria-label='Toggle navigation menu'
+            aria-expanded={opened}
+            aria-controls='mobile-navigation'
           />
 
-          {/* Logo */}
           <Text
-            component={Link}
+            component={NavLink}
             to='/'
             fw={700}
             size='xl'
+            tabIndex={0}
             style={{
               textDecoration: 'none',
               color: 'black',
@@ -92,35 +108,58 @@ export default function Navbar() {
             MODERN
           </Text>
 
-          {/* Desktop Nav */}
-          <Group visibleFrom='sm' gap='xl'>
+          <Group
+            component='nav'
+            aria-label='Main navigation'
+            visibleFrom='sm'
+            gap='xl'
+          >
             {navLinks}
           </Group>
 
-          {/* Right Icons */}
           <Group gap='md'>
-            <ActionIcon variant='subtle' color='dark'>
-              <IconSearch size={20} />
+            <ActionIcon
+              variant='subtle'
+              color='dark'
+              aria-label='Search'
+              tabIndex={0}
+            >
+              <IconSearch size={20} aria-hidden='true' />
             </ActionIcon>
-            <ActionIcon variant='subtle' color='dark'>
-              <IconUser size={20} />
+
+            <ActionIcon
+              variant='subtle'
+              color='dark'
+              aria-label='User account'
+              tabIndex={0}
+            >
+              <IconUser size={20} aria-hidden='true' />
             </ActionIcon>
-            <ActionIcon variant='subtle' color='dark'>
-              <IconShoppingBag size={20} />
+
+            <ActionIcon
+              variant='subtle'
+              color='dark'
+              aria-label='Shopping cart'
+              tabIndex={0}
+            >
+              <IconShoppingBag size={20} aria-hidden='true' />
             </ActionIcon>
           </Group>
         </Container>
       </AppShell.Header>
 
-      {/* Mobile Drawer */}
       <Drawer
+        id='mobile-navigation'
         opened={opened}
-        onClose={() => setOpened(!opened)}
-        title='Menu'
+        onClose={() => setOpened(false)}
+        title='Navigation Menu'
         padding='md'
         size='75%'
+        aria-label='Mobile navigation'
       >
-        <Stack gap='lg'>{navLinks}</Stack>
+        <Stack component='nav' aria-label='Mobile navigation links' gap='lg'>
+          {navLinks}
+        </Stack>
       </Drawer>
     </>
   );
