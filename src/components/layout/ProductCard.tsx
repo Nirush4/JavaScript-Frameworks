@@ -1,4 +1,3 @@
-// src/components/ProductCard.tsx
 import {
   Card,
   Image,

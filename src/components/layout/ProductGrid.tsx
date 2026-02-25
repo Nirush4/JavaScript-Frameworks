@@ -1,4 +1,3 @@
-// src/components/AllProductsSection.tsx
 import { Center, Loader, Text, Pagination, Group } from '@mantine/core';
 import { useState } from 'react';
 import { useProducts } from '../../hooks/useProducts';
