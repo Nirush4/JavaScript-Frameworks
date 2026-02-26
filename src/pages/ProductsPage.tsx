@@ -1,5 +1,7 @@
+import AllProductsSection from '../components/layout/ProductGrid';
+
 function ProductsPage() {
-  return <div>ProductsPage</div>;
+  return <AllProductsSection />;
 }
 
 export default ProductsPage;

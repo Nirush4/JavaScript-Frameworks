@@ -7,6 +7,18 @@ export default function AllProductsSection() {
   const [page, setPage] = useState(1);
   const { data, isLoading, isError } = useProducts(page);
 
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+
+    const section = document.getElementById('products-list');
+    if (section) {
+      section.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
+
   if (isLoading)
     return (
       <Center className='h-[50vh]'>
@@ -26,7 +38,22 @@ export default function AllProductsSection() {
   const products = data?.data || [];
 
   return (
-    <div className='px-8 pt-20 max-w-350 mx-auto'>
+    <section id='products-list' className='px-8 pt-20 max-w-350 mx-auto'>
+      <div className='mb-16 text-center'>
+        <Text
+          size='xs'
+          tt='uppercase'
+          c='dimmed'
+          fw={500}
+          className='text-base tracking-[0.7em] uppercase text-neutral-500'
+        >
+          Explore
+        </Text>
+
+        <h2 className='text-3xl md:text-5xl font-light mt-0 tracking-[-0.02em] font-serif leading-tight'>
+          All Products
+        </h2>
+      </div>
       <div className='grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
@@ -37,11 +64,11 @@ export default function AllProductsSection() {
         <Group justify='center' className='py-10'>
           <Pagination
             value={page}
-            onChange={setPage}
+            onChange={handlePageChange}
             total={data.meta.pageCount}
           />
         </Group>
       )}
-    </div>
+    </section>
   );
 }

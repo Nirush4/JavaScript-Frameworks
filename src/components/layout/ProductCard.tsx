@@ -8,19 +8,7 @@ import {
   Rating,
   Box,
 } from '@mantine/core';
-
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  discountedPrice?: number;
-  image: {
-    url: string;
-    alt: string;
-  };
-  rating: number;
-}
+import type { Product } from '../../types/product';
 
 interface ProductCardProps {
   product: Product;

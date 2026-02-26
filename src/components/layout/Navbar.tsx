@@ -5,13 +5,15 @@ import {
   Group,
   Burger,
   Drawer,
+  Image,
   Stack,
-  Text,
   ActionIcon,
-  rem,
+  Box,
 } from '@mantine/core';
 import { IconSearch, IconUser, IconShoppingBag } from '@tabler/icons-react';
 import { NavLink } from 'react-router-dom';
+
+import logo from '../../assets/logo.png';
 
 export default function Navbar() {
   const [opened, setOpened] = useState(false);
@@ -75,7 +77,7 @@ export default function Navbar() {
         }}
       >
         <Container
-          size='lg'
+          size='xl'
           h='100%'
           style={{
             display: 'flex',
@@ -93,21 +95,9 @@ export default function Navbar() {
             aria-controls='mobile-navigation'
           />
 
-          <Text
-            component={NavLink}
-            to='/'
-            fw={700}
-            size='xl'
-            tabIndex={0}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-              letterSpacing: rem(2),
-            }}
-          >
-            MODERN
-          </Text>
-
+          <Box w={200} component={NavLink} to='/' visibleFrom='sm'>
+            <Image src={logo} alt='Site Logo' />
+          </Box>
           <Group
             component='nav'
             aria-label='Main navigation'
@@ -152,11 +142,14 @@ export default function Navbar() {
         id='mobile-navigation'
         opened={opened}
         onClose={() => setOpened(false)}
-        title='Navigation Menu'
         padding='md'
         size='75%'
         aria-label='Mobile navigation'
       >
+        <Box component={NavLink} to='/' hiddenFrom='sm'>
+          <Image src={logo} alt='Site Logo' w={200} pb={40} />
+        </Box>
+
         <Stack component='nav' aria-label='Mobile navigation links' gap='lg'>
           {navLinks}
         </Stack>
