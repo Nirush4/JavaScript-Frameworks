@@ -1,4 +1,4 @@
-import { Center, Loader, Text, Pagination, Group } from '@mantine/core';
+import { Center, Loader, Text, Pagination } from '@mantine/core';
 import { useState } from 'react';
 import { useProducts } from '../../hooks/useProducts';
 import ProductCard from './ProductCard';
@@ -38,36 +38,32 @@ export default function AllProductsSection() {
   const products = data?.data || [];
 
   return (
-    <section id='products-list' className='px-8 pt-20 max-w-350 mx-auto'>
-      <div className='mb-16 text-center'>
-        <Text
-          size='xs'
-          tt='uppercase'
-          c='dimmed'
-          fw={500}
-          className='text-base tracking-[0.7em] uppercase text-neutral-500'
-        >
+    <section id='products-list' className='px-4 sm:px-8 max-w-338 mx-auto'>
+      <div className='mb-7 sm:mb-16 text-center'>
+        <p className='text-sm sm:text-base tracking-[0.4em] uppercase text-neutral-500 font-medium'>
           Explore
-        </Text>
+        </p>
 
-        <h2 className='text-3xl md:text-5xl font-light mt-0 tracking-[-0.02em] font-serif leading-tight'>
+        <h2 className='text-2xl sm:text-4xl md:text-5xl font-light tracking-tight font-serif leading-tight'>
           All Products
         </h2>
       </div>
-      <div className='grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+
+      <div className='grid gap-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
 
       {data?.meta?.pageCount && data.meta.pageCount > 1 && (
-        <Group justify='center' className='py-10'>
+        <div className='flex justify-center py-12'>
           <Pagination
             value={page}
+            color='black'
             onChange={handlePageChange}
             total={data.meta.pageCount}
           />
-        </Group>
+        </div>
       )}
     </section>
   );

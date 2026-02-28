@@ -5,7 +5,10 @@ export default function BestSellersSection() {
   const { data, isLoading, isError } = useProducts(1);
   const allProducts = data?.data || [];
 
-  const bestSellers = allProducts.filter((p) => p.rating >= 4.5).slice(0, 4);
+  const bestSellers = allProducts
+    .filter((p) => p.rating >= 4.5)
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, 4);
 
   if (isLoading)
     return (
@@ -29,17 +32,10 @@ export default function BestSellersSection() {
     <section className='py-24 bg-white'>
       <Container size='xl'>
         <div className='mb-16 text-center'>
-          <Text
-            size='xs'
-            tt='uppercase'
-            c='dimmed'
-            fw={500}
-            className='text-base tracking-[0.7em] uppercase text-neutral-500'
-          >
+          <p className='text-sm sm:text-base tracking-[0.4em] uppercase text-neutral-500 font-medium'>
             Popular Now
-          </Text>
-
-          <h2 className='text-3xl md:text-5xl font-light mt-0 tracking-[-0.02em] font-serif leading-tight'>
+          </p>
+          <h2 className='text-2xl md:text-5xl font-light mt-0 tracking-[-0.02em] font-serif leading-tight'>
             Best Sellers
           </h2>
         </div>
@@ -54,14 +50,16 @@ export default function BestSellersSection() {
               <div className='overflow-hidden'>
                 <img
                   src={product.image.url}
-                  alt={product.image.alt}
-                  className='w-full h-87.5 object-cover grayscale brightness-95 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700 ease-out'
+                  alt={product.image.alt || product.title}
+                  className='w-full h-40 sm:h-90 object-cover grayscale brightness-95 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700 ease-out'
                 />
               </div>
 
               <div className='mt-4 text-center'>
                 <p className='text-sm font-light'>{product.title}</p>
-                <p className='text-sm text-gray-500 mt-1'>${product.price}</p>
+                <p className='text-sm text-gray-500 mt-1'>
+                  ${Number(product.price).toFixed(2)}
+                </p>
               </div>
             </div>
           ))}
