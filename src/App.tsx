@@ -2,6 +2,7 @@ import { AppShell } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import ScrollToTop from './lib/utils/ScrollToTop';
 
 export default function App() {
   return (
@@ -9,6 +10,7 @@ export default function App() {
       <Navbar />
 
       <AppShell.Main>
+        <ScrollToTop />
         <Outlet />
       </AppShell.Main>
       <Footer />

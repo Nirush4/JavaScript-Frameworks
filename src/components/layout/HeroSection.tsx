@@ -7,7 +7,7 @@ export default function HeroSection() {
       className='relative h-[95vh] w-full flex items-center bg-cover bg-center'
       style={{
         backgroundImage:
-          "url('https://getjaybe.com/storage/2021/12/Best-Online-Shopping-Sites-in-Egypt.jpg')",
+          "url('https://img.freepik.com/free-photo/happy-couple-having-fun-while-online-shopping-home_637285-12597.jpg?semt=ais_user_personalization&w=740&q=80')",
       }}
     >
       {/* Overlay */}
@@ -17,7 +17,7 @@ export default function HeroSection() {
       <div className='relative z-10 flex flex-col items-center container mx-auto px-4 lg:px-0 text-left sm:text-center'>
         <h1
           id='hero-heading'
-          className='text-white font-bold tracking-wide text-center leading-none text-3xl sm:text-5xl'
+          className='text-white font-bold tracking-wide text-center leading-none text-3xl sm:text-6xl'
         >
           NEW SEASON ARRIVALS
         </h1>
@@ -28,7 +28,7 @@ export default function HeroSection() {
 
         <div className='flex sm:justify-start justify-center'>
           <Link
-            to='/'
+            to='/products'
             aria-label="Shop men's collection"
             className='bg-white text-black px-6 py-3 font-medium rounded-full hover:bg-lime-600 hover:text-white transition-colors duration-300'
           >

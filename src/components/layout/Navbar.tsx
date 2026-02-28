@@ -9,14 +9,19 @@ import {
   Stack,
   ActionIcon,
   Box,
+  Indicator,
 } from '@mantine/core';
 import { IconSearch, IconUser, IconShoppingBag } from '@tabler/icons-react';
 import { NavLink } from 'react-router-dom';
-
 import logo from '../../assets/logo.png';
+import { useCartStore } from '../../store/cartStore';
+import ShoppingCart from './ShoppingCart';
 
 export default function Navbar() {
   const [opened, setOpened] = useState(false);
+  const [cartOpened, setCartOpened] = useState(false);
+
+  const totalItems = useCartStore((state) => state.totalItems());
 
   const toggleDrawer = () => setOpened((o) => !o);
 
@@ -25,19 +30,18 @@ export default function Navbar() {
       <NavLink
         to='/'
         className={({ isActive }) =>
-          `text-black no-underline  ${
-            isActive ? 'text-blue-500 font-bold text-lg' : ''
+          `text-black no-underline ${
+            isActive ? 'text-black font-bold text-lg' : ''
           }`
         }
       >
         Home
       </NavLink>
-
       <NavLink
         to='/products'
         className={({ isActive }) =>
           `text-black no-underline ${
-            isActive ? 'text-blue-500 font-bold text-lg' : ''
+            isActive ? 'text-black font-bold text-lg' : ''
           }`
         }
       >
@@ -47,18 +51,17 @@ export default function Navbar() {
         to='/about'
         className={({ isActive }) =>
           `text-black no-underline ${
-            isActive ? 'text-blue-500 font-bold text-lg' : ''
+            isActive ? 'text-black  font-bold text-lg' : ''
           }`
         }
       >
         About
       </NavLink>
-
       <NavLink
         to='/contact'
         className={({ isActive }) =>
           `text-black no-underline ${
-            isActive ? 'text-blue-500 font-bold text-lg' : ''
+            isActive ? 'text-black  font-bold text-lg' : ''
           }`
         }
       >
@@ -98,6 +101,7 @@ export default function Navbar() {
           <Box w={200} component={NavLink} to='/' visibleFrom='sm'>
             <Image src={logo} alt='Site Logo' />
           </Box>
+
           <Group
             component='nav'
             aria-label='Main navigation'
@@ -108,32 +112,31 @@ export default function Navbar() {
           </Group>
 
           <Group gap='md'>
-            <ActionIcon
-              variant='subtle'
-              color='dark'
-              aria-label='Search'
-              tabIndex={0}
-            >
-              <IconSearch size={20} aria-hidden='true' />
+            <ActionIcon variant='subtle' color='dark' aria-label='Search'>
+              <IconSearch size={20} />
             </ActionIcon>
 
-            <ActionIcon
-              variant='subtle'
-              color='dark'
-              aria-label='User account'
-              tabIndex={0}
-            >
-              <IconUser size={20} aria-hidden='true' />
+            <ActionIcon variant='subtle' color='dark' aria-label='User account'>
+              <IconUser size={20} />
             </ActionIcon>
 
-            <ActionIcon
-              variant='subtle'
-              color='dark'
-              aria-label='Shopping cart'
-              tabIndex={0}
+            <Indicator
+              label={totalItems > 20 ? '20+' : totalItems}
+              size={18}
+              disabled={totalItems === 0}
+              color='red'
+              offset={6}
+              withBorder
             >
-              <IconShoppingBag size={20} aria-hidden='true' />
-            </ActionIcon>
+              <ActionIcon
+                variant='subtle'
+                color='dark'
+                aria-label='Open shopping cart'
+                onClick={() => setCartOpened(true)}
+              >
+                <IconShoppingBag size={22} />
+              </ActionIcon>
+            </Indicator>
           </Group>
         </Container>
       </AppShell.Header>
@@ -154,6 +157,9 @@ export default function Navbar() {
           {navLinks}
         </Stack>
       </Drawer>
+
+      {/* Shopping Cart Drawer */}
+      <ShoppingCart opened={cartOpened} onClose={() => setCartOpened(false)} />
     </>
   );
 }

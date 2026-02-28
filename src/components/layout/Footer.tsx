@@ -7,7 +7,6 @@ const footerLinks = [
   { label: 'Products', href: '/products' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
-  { label: 'Help', href: '/help' },
 ];
 
 export default function Footer() {
@@ -52,11 +51,11 @@ export default function Footer() {
   ];
 
   return (
-    <footer className='bg-gray-50 py-12 border-t border-gray-200'>
+    <footer className='bg-gray-50 py-10 border-t border-gray-200'>
       <div className='container mx-auto px-4'>
-        <div className='flex flex-col md:flex-row md:justify-between md:items-start gap-10'>
+        <div className='flex flex-col md:flex-row md:justify-between md:items-start gap-05 sm:gap-10'>
           <div className='flex-1 bg-white p-6 rounded-xl shadow-md'>
-            <h3 className='text-lg sm:text-xl font-bold mb-2'>
+            <h3 className='text-base sm:text-xl font-bold mb-2'>
               Subscribe to our Newsletter
             </h3>
             <p className='text-sm sm:text-base text-gray-600 mb-4'>
@@ -99,7 +98,7 @@ export default function Footer() {
           </div>
 
           <div className='flex-1 mt-6 md:mt-0'>
-            <h3 className='text-lg sm:text-xl font-semibold mb-2 text-gray-800'>
+            <h3 className='text-base sm:text-xl font-semibold mb-2 text-gray-800'>
               Follow Us
             </h3>
             <div className='flex gap-3'>
@@ -109,7 +108,7 @@ export default function Footer() {
                   to={link.href}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition transform hover:scale-105'
+                  className='w-10 h-10 flex items-center justify-center rounded-full border border-gray-400 text-gray-600 hover:bg-black hover:text-white transition transform hover:scale-105'
                 >
                   {link.icon}
                 </Link>
@@ -134,7 +133,14 @@ export default function Footer() {
           </div>
           <p className='text-gray-500 text-xs sm:text-sm mt-2 md:mt-0 text-center md:text-left'>
             &copy; {new Date().getFullYear()} My Online Shop. All rights
-            reserved.
+            reserved. Designed & built by{' '}
+            <a
+              target='blank'
+              href='https://www.linkedin.com/in/nirushan-rajamanoharan/'
+              className='font-bold text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text'
+            >
+              NIRUSH.
+            </a>
           </p>
         </div>
       </div>

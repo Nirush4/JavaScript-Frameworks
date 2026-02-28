@@ -31,10 +31,10 @@ export default function NewArrivalsSection() {
       <Container size='xl'>
         <div className='flex justify-between items-end mb-10 md:mb-20'>
           <div>
-            <p className='text-base tracking-[0.7em] uppercase text-neutral-500'>
+            <p className='text-sm sm:text-base tracking-[0.4em] uppercase text-neutral-500 font-medium'>
               New Collection
             </p>
-            <h2 className='text-4xl md:text-6xl font-light mt-0 tracking-[-0.02em] font-serif leading-tight'>
+            <h2 className='text-2xl md:text-5xl font-light mt-0 tracking-[-0.02em] font-serif leading-tight'>
               New Arrivals
             </h2>
           </div>
@@ -47,36 +47,42 @@ export default function NewArrivalsSection() {
           </Link>
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-12 gap-8'>
+        <div className='grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8'>
           <div className='md:col-span-7 group cursor-pointer'>
             <div className='overflow-hidden'>
               <img
                 src={products[0].image.url}
                 alt={products[0].image.alt}
-                className='w-full h-175 object-cover grayscale brightness-95 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700 ease-out'
+                className='w-full h-60 sm:h-64 md:h-175 object-cover grayscale brightness-95 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700 ease-out'
               />
             </div>
 
-            <div className='mt-6'>
-              <h3 className='text-xl font-light'>{products[0].title}</h3>
-              <p className='mt-2 text-black font-bold'>${products[0].price}</p>
+            <div className='mt-4 sm:mt-6'>
+              <h3 className='text-sm sm:text-xl md:text-2xl font-light line-clamp-2'>
+                {products[0].title}
+              </h3>
+              <p className='mt-2 text-black font-bold text-sm sm:text-lg'>
+                ${products[0].price}
+              </p>
             </div>
           </div>
 
-          <div className='md:col-span-5 grid gap-8'>
+          <div className='md:col-span-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-6'>
             {products.slice(1).map((product) => (
               <div key={product.id} className='group cursor-pointer'>
                 <div className='overflow-hidden'>
                   <img
                     src={product.image.url}
                     alt={product.image.alt}
-                    className='w-full h-80 object-cover transition-transform duration-700 group-hover:scale-[1.03]'
+                    className='w-full h-60 sm:h-64 md:h-73 object-cover transition-transform duration-700 group-hover:scale-[1.03]'
                   />
                 </div>
 
-                <div className='mt-4'>
-                  <h4 className='text-sm font-light'>{product.title}</h4>
-                  <p className='text-sm text-black font-bold mt-1'>
+                <div className='mt-2 sm:mt-4'>
+                  <h4 className='text-sm sm:text-base font-light line-clamp-2'>
+                    {product.title}
+                  </h4>
+                  <p className='text-sm sm:text-base text-black font-bold mt-1'>
                     ${product.price}
                   </p>
                 </div>

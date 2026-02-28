@@ -1,14 +1,7 @@
-import {
-  Card,
-  Image,
-  Text,
-  Badge,
-  Group,
-  Button,
-  Rating,
-  Box,
-} from '@mantine/core';
 import type { Product } from '../../types/product';
+import { useCartStore } from '../../store/cartStore';
+import { calculateDiscountDetails } from '../../lib/utils/discount';
+import { Rating } from '@mantine/core';
 
 interface ProductCardProps {
   product: Product;
@@ -17,85 +10,98 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { id, title, image, price, discountedPrice, rating } = product;
 
-  const hasDiscount = discountedPrice && discountedPrice < price;
-  const discountPercent = hasDiscount
-    ? Math.round(((price - discountedPrice!) / price) * 100)
-    : 0;
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const { hasDiscount, discountPercent, finalPrice } = calculateDiscountDetails(
+    {
+      price,
+      discountedPrice,
+    }
+  );
+
+  const handleAddToCart = () => {
+    addToCart({
+      id,
+      title,
+      price: finalPrice,
+      originalPrice: price,
+      image: image.url,
+      rating: rating ?? 0,
+    });
+  };
 
   return (
-    <Card
-      shadow='sm'
-      padding='lg'
-      radius='md'
-      className='transition-transform duration-300 hover:scale-103 hover:shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500'
+    <div
+      key={id}
+      className='relative bg-white rounded-md shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.03] hover:shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500'
       role='group'
       aria-labelledby={`product-title-${id}`}
       tabIndex={0}
     >
-      <Box style={{ position: 'relative' }}>
-        <Card.Section>
-          <Image src={image.url} mah={200} alt={image.alt} />
-        </Card.Section>
+      <div className='relative w-full'>
+        <img
+          src={image.url}
+          alt={image.alt}
+          className='w-full h-40 sm:h-56 md:h-60 object-cover'
+        />
 
-        {hasDiscount ? (
-          <Badge
-            color='lime'
-            variant='filled'
-            radius='md'
-            size='lg'
-            style={{
-              position: 'absolute',
-              top: 5,
-              left: 5,
-              zIndex: 10,
-            }}
+        {hasDiscount && (
+          <span
+            className='absolute top-2 left-2 bg-green-500 text-white text-xs sm:text-sm font-semibold px-2 py-1 rounded-lg z-10'
             aria-label={`${discountPercent}% off`}
           >
             {discountPercent}% OFF
-          </Badge>
-        ) : (
-          <div></div>
+          </span>
         )}
-      </Box>
+      </div>
 
-      <Text fw={500} lineClamp={2} mt='md' mb='xs' id={`product-title-${id}`}>
-        {title}
-      </Text>
+      <div className='p-4 flex flex-col'>
+        <h2 id={`product-title-${id}`} className='font-medium mb-1'>
+          <span className='line-clamp-1 sm:hidden'>{title}</span>
+          <span className='hidden sm:inline line-clamp-2'>{title}</span>
+        </h2>
 
-      <Group gap='xs' align='center'>
-        <Text fw={700} fz='lg'>
-          ${hasDiscount ? discountedPrice!.toFixed(2) : price.toFixed(2)}
-        </Text>
-        {hasDiscount && (
-          <Text
-            fz='sm'
-            c='dimmed'
-            style={{ textDecoration: 'line-through' }}
-            aria-label={`Original price $${price.toFixed(2)}`}
-          >
-            ${price.toFixed(2)}
-          </Text>
-        )}
-      </Group>
+        <div className='flex items-center gap-2 mb-1'>
+          <span className='font-bold text-base sm:text-lg'>
+            {finalPrice.toLocaleString('nb-NO', {
+              style: 'currency',
+              currency: 'NOK',
+              minimumFractionDigits: 0,
+            })}
+          </span>
+          {hasDiscount && (
+            <span
+              className='text-gray-500 text-sm line-through'
+              aria-label={`Original price $${price.toFixed(2)}`}
+            >
+              $
+              {price.toLocaleString('nb-NO', {
+                style: 'currency',
+                currency: 'NOK',
+                minimumFractionDigits: 0,
+              })}
+            </span>
+          )}
+        </div>
 
-      <Rating
-        value={rating}
-        readOnly
-        fractions={2}
-        size='sm'
-        mt='xs'
-        aria-label={`Rated ${rating} out of 5`}
-      />
+        <div className='mb-3'>
+          <Rating
+            value={rating}
+            readOnly
+            fractions={2}
+            size={16}
+            aria-label={`Rated ${rating} out of 5`}
+          />
+        </div>
 
-      <Button
-        fullWidth
-        mt='md'
-        radius='md'
-        color='blue'
-        aria-label={`Add ${title} to cart`}
-      >
-        Add to Cart
-      </Button>
-    </Card>
+        <button
+          className='w-full bg-black text-white py-1 cursor-pointer sm:py-2 rounded-md hover:bg-gray-700 transition text-s sm:text-base'
+          aria-label={`Add ${title} to cart`}
+          onClick={handleAddToCart}
+        >
+          Add to Cart
+        </button>
+      </div>
+    </div>
   );
 }
