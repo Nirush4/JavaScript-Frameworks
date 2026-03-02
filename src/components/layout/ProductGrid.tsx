@@ -56,7 +56,7 @@ export default function AllProductsSection() {
       </div>
 
       {data?.meta?.pageCount && data.meta.pageCount > 1 && (
-        <div className='flex justify-center py-12'>
+        <div className='flex justify-center py-20'>
           <Pagination
             value={page}
             color='black'

@@ -1,8 +1,11 @@
 import { Center, Container, Loader, Text } from '@mantine/core';
 import { useProducts } from '../../hooks/useProducts';
+import { useNavigate } from 'react-router-dom';
 
 export default function BestSellersSection() {
   const { data, isLoading, isError } = useProducts(1);
+  const navigate = useNavigate();
+
   const allProducts = data?.data || [];
 
   const bestSellers = allProducts
@@ -42,7 +45,19 @@ export default function BestSellersSection() {
 
         <div className='grid gap-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
           {bestSellers.map((product) => (
-            <div key={product.id} className='group relative cursor-pointer'>
+            <div
+              key={product.id}
+              className='group relative cursor-pointer'
+              onClick={() => navigate(`/products/${product.id}`)}
+              role='button'
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  navigate(`/products/${product.id}`);
+                }
+              }}
+              aria-label={`View details for ${product.title}`}
+            >
               <span className='absolute top-2 left-2 bg-black text-white text-xs uppercase px-2 py-1 font-semibold tracking-wide z-10'>
                 Best Seller
               </span>
@@ -56,9 +71,13 @@ export default function BestSellersSection() {
               </div>
 
               <div className='mt-4 text-center'>
-                <p className='text-sm font-light'>{product.title}</p>
-                <p className='text-sm text-gray-500 mt-1'>
-                  ${Number(product.price).toFixed(2)}
+                <h2 className='text-base text-black '>{product.title}</h2>
+                <p className='text-sm sm:text-base text-black mt-1 font-bold'>
+                  {Number(product.price).toLocaleString('nb-NO', {
+                    style: 'currency',
+                    currency: 'NOK',
+                    minimumFractionDigits: 0,
+                  })}
                 </p>
               </div>
             </div>
