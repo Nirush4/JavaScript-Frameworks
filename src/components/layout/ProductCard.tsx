@@ -2,6 +2,7 @@ import type { Product } from '../../types/product';
 import { useCartStore } from '../../store/cartStore';
 import { calculateDiscountDetails } from '../../lib/utils/discount';
 import { Rating } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
   product: Product;
@@ -10,6 +11,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { id, title, image, price, discountedPrice, rating } = product;
 
+  const navigate = useNavigate();
   const addToCart = useCartStore((state) => state.addToCart);
 
   const { hasDiscount, discountPercent, finalPrice } = calculateDiscountDetails(
@@ -19,7 +21,13 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
   );
 
-  const handleAddToCart = () => {
+  const handleNavigate = () => {
+    navigate(`/products/${id}`);
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
     addToCart({
       id,
       title,
@@ -32,8 +40,8 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div
-      key={id}
-      className='relative bg-white rounded-md shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.03] hover:shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500'
+      onClick={handleNavigate}
+      className='relative bg-white shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.03] hover:shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500'
       role='group'
       aria-labelledby={`product-title-${id}`}
       tabIndex={0}
@@ -47,7 +55,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {hasDiscount && (
           <span
-            className='absolute top-2 left-2 bg-green-500 text-white text-xs sm:text-sm font-semibold px-2 py-1 rounded-lg z-10'
+            className='absolute top-2 left-2 bg-green-500 text-white text-xs sm:text-sm font-semibold px-2 py-1 z-10'
             aria-label={`${discountPercent}% off`}
           >
             {discountPercent}% OFF
@@ -62,19 +70,16 @@ export default function ProductCard({ product }: ProductCardProps) {
         </h2>
 
         <div className='flex items-center gap-2 mb-1'>
-          <span className='font-bold text-base sm:text-lg'>
+          <span className='font-bold text-base text-red-500 sm:text-lg'>
             {finalPrice.toLocaleString('nb-NO', {
               style: 'currency',
               currency: 'NOK',
               minimumFractionDigits: 0,
             })}
           </span>
+
           {hasDiscount && (
-            <span
-              className='text-gray-500 text-sm line-through'
-              aria-label={`Original price $${price.toFixed(2)}`}
-            >
-              $
+            <span className='text-black font-medium text-sm line-through'>
               {price.toLocaleString('nb-NO', {
                 style: 'currency',
                 currency: 'NOK',
@@ -95,7 +100,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <button
-          className='w-full bg-black text-white py-1 cursor-pointer sm:py-2 rounded-md hover:bg-gray-700 transition text-s sm:text-base'
+          className='w-full bg-black text-white py-1 sm:py-2 hover:bg-gray-700 transition text-sm sm:text-base cursor-pointer'
           aria-label={`Add ${title} to cart`}
           onClick={handleAddToCart}
         >
