@@ -97,13 +97,13 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                           value={item.rating}
                           readOnly
                           fractions={2}
-                          size='sm'
+                          size='xs'
                           mt='xs'
                           aria-label={`Rated ${item.rating} out of 5`}
                         />
                       )}
 
-                      <div className='flex items-center gap-2 text-sm'>
+                      <div className='flex flex-wrap sm:flex-nowrap items-center gap-2 text-sm'>
                         <span
                           className={`font-bold ${
                             hasDiscount ? 'text-red-600' : 'text-black'
@@ -118,14 +118,14 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
 
                         {hasDiscount && (
                           <>
-                            <span className='line-through text-gray-400'>
+                            <span className='line-through text-gray-400 text-xs sm:text-sm'>
                               {item.originalPrice?.toLocaleString('nb-NO', {
                                 style: 'currency',
                                 currency: 'NOK',
                                 minimumFractionDigits: 0,
                               })}
                             </span>
-                            <span className='text-green-600 text-s font-medium'>
+                            <span className='text-green-600 text-xs sm:text-sm font-medium'>
                               -{discountPercent}%
                             </span>
                           </>
