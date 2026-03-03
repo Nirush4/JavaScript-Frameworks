@@ -30,7 +30,7 @@ export default function ProductDetailsPage() {
 
   return (
     <div>
-      <Container size='xl' className='pt-10'>
+      <Container size='xl' className='pt-5 md:pt-10 text-sm'>
         <Breadcrumbs productName={product.title} />
       </Container>
       <ProductDetailsLayout product={product} onAddToCart={handleAddToCart} />

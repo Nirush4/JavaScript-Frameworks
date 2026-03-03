@@ -28,12 +28,12 @@ export default function ProductDetailsLayout({
 
   return (
     <section
-      className='py-7'
+      className='py-2 md:py-7'
       aria-labelledby='product-details-title'
       role='region'
     >
       <Container size='xl'>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-12'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-12'>
           <div>
             <img
               src={product.image.url}
@@ -134,25 +134,42 @@ export default function ProductDetailsLayout({
               </div>
             )}
 
-            {/* Quantity and Add to Cart */}
-            <div className='flex items-center gap-4 mb-3'>
+            <div className='flex items-center gap-4 mb-5 sm:mb-12 mt-3 sm:mt-5'>
               <label htmlFor='product-quantity' className='font-medium'>
                 Quantity:
               </label>
-              <input
-                id='product-quantity'
-                type='number'
-                min={1}
-                value={quantity}
-                onChange={(e) => handleQuantityChange(Number(e.target.value))}
-                className='w-20 border rounded px-2 py-1 text-center'
-                aria-label='Quantity to add to cart'
-              />
+              <div className='flex items-center border rounded-md overflow-hidden'>
+                <button
+                  type='button'
+                  onClick={() => handleQuantityChange(quantity - 1)}
+                  disabled={quantity <= 1}
+                  className='px-3 py-1 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition'
+                  aria-label='Decrease quantity'
+                >
+                  −
+                </button>
+
+                <span
+                  className='px-4 font-semibold select-none'
+                  aria-live='polite'
+                >
+                  {quantity}
+                </span>
+
+                <button
+                  type='button'
+                  onClick={() => handleQuantityChange(quantity + 1)}
+                  className='px-3 py-1 hover:bg-gray-100 transition'
+                  aria-label='Increase quantity'
+                >
+                  +
+                </button>
+              </div>
             </div>
 
             <button
               onClick={() => onAddToCart(quantity)}
-              className='w-full bg-black text-white py-1 sm:py-2 hover:bg-gray-700 transition text-sm sm:text-base cursor-pointer mb-6'
+              className='w-full bg-black text-white py-2 sm:py-2 hover:bg-gray-700 transition text-sm sm:text-base cursor-pointer mb-6'
               aria-label={`Add ${quantity} of ${product.title} to cart`}
             >
               Add to Cart

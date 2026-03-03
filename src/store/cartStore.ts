@@ -53,11 +53,12 @@ export const useCartStore = create<CartState & CartAction>()(
 
       updateQuantity: (id, quantity) => {
         set((state) => ({
-          items: state.items.map((item) =>
-            item.id === id
-              ? { ...item, quantity: quantity < 1 ? 1 : quantity }
-              : item
-          ),
+          items:
+            quantity <= 0
+              ? state.items.filter((item) => item.id !== id)
+              : state.items.map((item) =>
+                  item.id === id ? { ...item, quantity } : item
+                ),
         }));
       },
 

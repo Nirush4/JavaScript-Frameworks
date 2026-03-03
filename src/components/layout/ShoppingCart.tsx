@@ -133,16 +133,30 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                       </div>
                     </div>
 
-                    <div className='flex flex-col items-end gap-2'>
-                      <input
-                        type='number'
-                        min={1}
-                        value={item.quantity}
-                        onChange={(e) =>
-                          updateQuantity(item.id, Number(e.target.value))
-                        }
-                        className='w-10 text-center border rounded-md text-sm font-semibold'
-                      />
+                    <div className='flex flex-col items-end gap-4'>
+                      <div className='flex items-center border rounded-md overflow-hidden'>
+                        <button
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity - 1)
+                          }
+                          className='px-2 py-1/2 text-sm font-extrabold transition cursor-pointer'
+                        >
+                          −
+                        </button>
+
+                        <span className=' text-sm font-semibold'>
+                          {item.quantity}
+                        </span>
+
+                        <button
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity + 1)
+                          }
+                          className='px-2 py-1/2 text-sm font-extrabold transition cursor-pointer'
+                        >
+                          +
+                        </button>
+                      </div>
 
                       <div
                         onClick={() => removeFromCart(item.id)}
