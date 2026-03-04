@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   AppShell,
   Container,
@@ -10,61 +10,63 @@ import {
   ActionIcon,
   Box,
   Indicator,
+  TextInput,
 } from '@mantine/core';
 import { IconSearch, IconUser, IconShoppingBag } from '@tabler/icons-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate, useSearchParams } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import { useCartStore } from '../../store/cartStore';
 import ShoppingCart from './ShoppingCart';
+import { useDebounce } from '../../hooks/useDebounce';
 
 export default function Navbar() {
   const [opened, setOpened] = useState(false);
   const [cartOpened, setCartOpened] = useState(false);
 
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const searchFromUrl = searchParams.get('search') || '';
+  const [search, setSearch] = useState(searchFromUrl);
+  const debouncedSearch = useDebounce(search, 400);
+
   const totalItems = useCartStore((state) => state.totalItems());
 
   const toggleDrawer = () => setOpened((o) => !o);
 
+  useEffect(() => {
+    const trimmed = debouncedSearch.trim();
+
+    if (
+      window.location.pathname.startsWith('/products/') &&
+      window.location.pathname !== '/products'
+    ) {
+      return;
+    }
+
+    if (trimmed) {
+      navigate(`/products?search=${trimmed}`);
+    } else {
+      navigate('/products');
+    }
+  }, [debouncedSearch, navigate]);
+
+  useEffect(() => {
+    setSearch(searchFromUrl);
+  }, [searchFromUrl]);
+
   const navLinks = (
     <>
-      <NavLink
-        to='/'
-        className={({ isActive }) =>
-          `text-black no-underline ${
-            isActive ? 'text-black font-bold text-lg' : ''
-          }`
-        }
-      >
+      <NavLink to='/' className='text-black no-underline'>
         Home
       </NavLink>
-      <NavLink
-        to='/products'
-        className={({ isActive }) =>
-          `text-black no-underline ${
-            isActive ? 'text-black font-bold text-lg' : ''
-          }`
-        }
-      >
+      <NavLink to='/products' className='text-black no-underline'>
         Products
       </NavLink>
-      <NavLink
-        to='/about'
-        className={({ isActive }) =>
-          `text-black no-underline ${
-            isActive ? 'text-black  font-bold text-lg' : ''
-          }`
-        }
-      >
+      <NavLink to='/about' className='text-black no-underline'>
         About
       </NavLink>
-      <NavLink
-        to='/contact'
-        className={({ isActive }) =>
-          `text-black no-underline ${
-            isActive ? 'text-black  font-bold text-lg' : ''
-          }`
-        }
-      >
+      <NavLink to='/contact' className='text-black no-underline'>
         Contact
       </NavLink>
     </>
@@ -74,10 +76,7 @@ export default function Navbar() {
     <>
       <AppShell.Header
         component='header'
-        style={{
-          backgroundColor: 'white',
-          borderBottom: '1px solid #eee',
-        }}
+        style={{ backgroundColor: 'white', borderBottom: '1px solid #eee' }}
       >
         <Container
           size='xl'
@@ -91,32 +90,30 @@ export default function Navbar() {
           <Burger
             opened={opened}
             onClick={toggleDrawer}
-            hiddenFrom='sm'
+            hiddenFrom='md'
             size='sm'
-            aria-label='Toggle navigation menu'
-            aria-expanded={opened}
-            aria-controls='mobile-navigation'
           />
 
-          <Box w={200} component={NavLink} to='/' visibleFrom='sm'>
+          <Box w={200} component={NavLink} to='/' visibleFrom='md'>
             <Image src={logo} alt='Site Logo' />
           </Box>
 
-          <Group
-            component='nav'
-            aria-label='Main navigation'
-            visibleFrom='sm'
-            gap='xl'
-          >
+          <Group visibleFrom='sm' gap='xl'>
             {navLinks}
           </Group>
 
           <Group gap='md'>
-            <ActionIcon variant='subtle' color='dark' aria-label='Search'>
-              <IconSearch size={20} />
-            </ActionIcon>
+            <TextInput
+              placeholder='Search products...'
+              value={search}
+              onChange={(e) => setSearch(e.currentTarget.value)}
+              leftSection={<IconSearch size={16} />}
+              size='sm'
+              radius='md'
+              visibleFrom='sm'
+            />
 
-            <ActionIcon variant='subtle' color='dark' aria-label='User account'>
+            <ActionIcon variant='subtle' color='dark'>
               <IconUser size={20} />
             </ActionIcon>
 
@@ -131,7 +128,6 @@ export default function Navbar() {
               <ActionIcon
                 variant='subtle'
                 color='dark'
-                aria-label='Open shopping cart'
                 onClick={() => setCartOpened(true)}
               >
                 <IconShoppingBag size={22} />
@@ -142,23 +138,28 @@ export default function Navbar() {
       </AppShell.Header>
 
       <Drawer
-        id='mobile-navigation'
         opened={opened}
         onClose={() => setOpened(false)}
         padding='md'
         size='75%'
-        aria-label='Mobile navigation'
       >
-        <Box component={NavLink} to='/' hiddenFrom='sm'>
+        <Box component={NavLink} to='/' hiddenFrom='md'>
           <Image src={logo} alt='Site Logo' w={200} pb={40} />
         </Box>
 
-        <Stack component='nav' aria-label='Mobile navigation links' gap='lg'>
-          {navLinks}
-        </Stack>
+        <TextInput
+          placeholder='Search products...'
+          value={search}
+          onChange={(e) => setSearch(e.currentTarget.value)}
+          leftSection={<IconSearch size={16} />}
+          size='sm'
+          radius='md'
+          mb='lg'
+        />
+
+        <Stack gap='lg'>{navLinks}</Stack>
       </Drawer>
 
-      {/* Shopping Cart Drawer */}
       <ShoppingCart opened={cartOpened} onClose={() => setCartOpened(false)} />
     </>
   );

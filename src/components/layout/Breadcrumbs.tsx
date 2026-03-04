@@ -42,7 +42,7 @@ export default function Breadcrumbs({ productName }: BreadcrumbsProps) {
     <MantineBreadcrumbs separator='/' mb='md'>
       {crumbs.map((crumb, idx) =>
         crumb.path ? (
-          <Anchor component={Link} to={crumb.path} key={idx} color='dimmed'>
+          <Anchor component={Link} to={crumb.path} key={idx} c='dimmed'>
             {crumb.label}
           </Anchor>
         ) : (

@@ -63,14 +63,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         )}
       </div>
 
-      <div className='p-4 flex flex-col'>
+      <div className='p-2 sm:p-4 flex flex-col'>
         <h2 id={`product-title-${id}`} className='font-medium mb-1'>
           <span className='line-clamp-1 sm:hidden'>{title}</span>
           <span className='hidden sm:inline line-clamp-2'>{title}</span>
         </h2>
 
         <div className='flex items-center gap-2 mb-1'>
-          <span className='font-bold text-base text-red-500 sm:text-lg'>
+          <span className='font-bold text-sm text-red-500 sm:text-lg'>
             {finalPrice.toLocaleString('nb-NO', {
               style: 'currency',
               currency: 'NOK',
