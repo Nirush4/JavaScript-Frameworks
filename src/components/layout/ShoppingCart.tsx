@@ -88,7 +88,13 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                     )}
 
                     <div className='space-y-1'>
-                      <h3 className='text-sm font-semibold line-clamp-2'>
+                      <h3
+                        className='text-sm font-semibold line-clamp-2 cursor-pointer hover:underline'
+                        onClick={() => {
+                          navigate(`/products/${item.id}`);
+                          onClose();
+                        }}
+                      >
                         {item.title}
                       </h3>
 
