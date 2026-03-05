@@ -18,6 +18,7 @@ import logo from '../../assets/logo.png';
 import { useCartStore } from '../../store/cartStore';
 import ShoppingCart from './ShoppingCart';
 import { useDebounce } from '../../hooks/useDebounce';
+import { useRef } from 'react';
 
 export default function Navbar() {
   const [opened, setOpened] = useState(false);
@@ -34,8 +35,15 @@ export default function Navbar() {
 
   const toggleDrawer = () => setOpened((o) => !o);
 
+  const firstRender = useRef(true);
+
   useEffect(() => {
     const trimmed = debouncedSearch.trim();
+
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
 
     if (
       window.location.pathname.startsWith('/products/') &&

@@ -2,6 +2,7 @@ import { Container, Rating } from '@mantine/core';
 import type { Product } from '../../types/product';
 import { calculateDiscountDetails } from '../../lib/utils/discount';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface ProductDetailsLayoutProps {
   product: Product;
@@ -24,6 +25,22 @@ export default function ProductDetailsLayout({
   const handleQuantityChange = (value: number) => {
     if (value < 1) return;
     setQuantity(value);
+  };
+
+  const handleAddToCart = () => {
+    onAddToCart(quantity);
+
+    toast.success(`${product.title} (${quantity}) added to cart! 🛒`, {
+      position: 'top-right',
+      autoClose: 3000,
+      style: {
+        borderRadius: '10px',
+        background: '#333',
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: '14px',
+      },
+    });
   };
 
   return (
@@ -168,7 +185,7 @@ export default function ProductDetailsLayout({
             </div>
 
             <button
-              onClick={() => onAddToCart(quantity)}
+              onClick={handleAddToCart}
               className='w-full bg-black text-white py-2 sm:py-2 hover:bg-gray-700 transition text-sm sm:text-base cursor-pointer mb-6'
               aria-label={`Add ${quantity} of ${product.title} to cart`}
             >
