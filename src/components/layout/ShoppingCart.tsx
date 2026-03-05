@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCartStore } from '../../store/cartStore';
 
 import { useNavigate } from 'react-router-dom';
 import { IconTrash, IconX } from '@tabler/icons-react';
-import { Rating } from '@mantine/core';
+import { Loader, Rating } from '@mantine/core';
 import { calculateDiscountDetails } from '../../lib/utils/discount';
 
 interface CartDrawerProps {
@@ -20,19 +20,30 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
 
   const navigate = useNavigate();
 
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
   const handleContinueShopping = () => {
     navigate('/products');
     onClose();
   };
 
   const handleCheckout = () => {
-    navigate('/success');
-    clearCart();
-    onClose();
+    setCheckoutLoading(true);
+
+    setTimeout(() => {
+      clearCart();
+      navigate('/checkout/success');
+      setCheckoutLoading(false);
+      onClose();
+    }, 1200);
   };
 
   useEffect(() => {
     document.body.style.overflow = opened ? 'hidden' : 'auto';
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
   }, [opened]);
 
   return (
@@ -49,7 +60,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
           transform transition-transform duration-300 flex flex-col
           ${opened ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        <div className='flex items-center justify-between p-5 border-b bg-white shrink-0 z-1000'>
+        <div className='flex items-center justify-between p-5 border-b bg-white shrink-0'>
           <h2 className='text-lg font-bold'>Shopping Cart</h2>
           <button
             onClick={onClose}
@@ -105,7 +116,6 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                           fractions={2}
                           size='xs'
                           mt='xs'
-                          aria-label={`Rated ${item.rating} out of 5`}
                         />
                       )}
 
@@ -143,14 +153,17 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                       <div className='flex items-center border rounded-md overflow-hidden'>
                         <button
                           onClick={() =>
-                            updateQuantity(item.id, item.quantity - 1)
+                            updateQuantity(
+                              item.id,
+                              Math.max(1, item.quantity - 1)
+                            )
                           }
-                          className='px-2 py-1/2 text-sm font-extrabold transition cursor-pointer'
+                          className='px-2 py-1 text-sm font-bold cursor-pointer'
                         >
                           −
                         </button>
 
-                        <span className=' text-sm font-semibold'>
+                        <span className='text-sm font-semibold px-2'>
                           {item.quantity}
                         </span>
 
@@ -158,7 +171,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                           onClick={() =>
                             updateQuantity(item.id, item.quantity + 1)
                           }
-                          className='px-2 py-1/2 text-sm font-extrabold transition cursor-pointer'
+                          className='px-2 py-1 text-sm font-bold cursor-pointer'
                         >
                           +
                         </button>
@@ -196,6 +209,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                 >
                   Clear Cart
                 </button>
+
                 <button
                   onClick={handleContinueShopping}
                   className='w-full border rounded-md py-2 hover:bg-gray-100 transition cursor-pointer'
@@ -205,9 +219,11 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
 
                 <button
                   onClick={handleCheckout}
-                  className='w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 cursor-pointer transition'
+                  disabled={checkoutLoading}
+                  className='w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition flex items-center justify-center gap-2 disabled:opacity-70'
                 >
-                  Checkout
+                  {checkoutLoading && <Loader size='xs' color='white' />}
+                  {checkoutLoading ? 'Processing...' : 'Checkout'}
                 </button>
               </div>
             </div>
