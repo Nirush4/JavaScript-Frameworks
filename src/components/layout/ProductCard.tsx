@@ -1,8 +1,9 @@
 import type { Product } from '../../types/product';
 import { useCartStore } from '../../store/cartStore';
 import { calculateDiscountDetails } from '../../lib/utils/discount';
-import { Rating } from '@mantine/core';
+import { Button, Rating } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface ProductCardProps {
   product: Product;
@@ -36,6 +37,18 @@ export default function ProductCard({ product }: ProductCardProps) {
       image: image.url,
       rating: rating ?? 0,
     });
+
+    toast.success(`${title} added to cart! 🛒`, {
+      position: 'top-right',
+      autoClose: 3000,
+      style: {
+        borderRadius: '10px',
+        background: '#333',
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: '14px',
+      },
+    });
   };
 
   return (
@@ -52,7 +65,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           alt={image.alt}
           className='w-full h-40 sm:h-56 md:h-60 object-cover'
         />
-
         {hasDiscount && (
           <span
             className='absolute top-2 left-2 bg-green-500 text-white text-xs sm:text-sm font-semibold px-2 py-1 z-10'
@@ -77,7 +89,6 @@ export default function ProductCard({ product }: ProductCardProps) {
               minimumFractionDigits: 0,
             })}
           </span>
-
           {hasDiscount && (
             <span className='text-black font-medium text-sm line-through'>
               {price.toLocaleString('nb-NO', {
@@ -99,13 +110,13 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
         </div>
 
-        <button
+        <Button
           className='w-full bg-black text-white py-1 sm:py-2 hover:bg-gray-700 transition text-sm sm:text-base cursor-pointer'
           aria-label={`Add ${title} to cart`}
           onClick={handleAddToCart}
         >
           Add to Cart
-        </button>
+        </Button>
       </div>
     </div>
   );
