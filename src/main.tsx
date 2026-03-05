@@ -11,7 +11,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
+
 import NotFoundPage from './pages/NotFoundPage';
+import CheckoutSuccessPage from './pages/CheckoutSuccess';
 
 const queryClient = new QueryClient();
 
@@ -25,6 +27,7 @@ const router = createBrowserRouter([
       { path: 'products/:id', element: <ProductDetailsPage /> },
       { path: 'about', element: <AboutPage /> },
       { path: 'contact', element: <ContactPage /> },
+      { path: 'checkout/success', element: <CheckoutSuccessPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
