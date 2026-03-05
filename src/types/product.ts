@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export interface ProductImage {
   url: string;
   alt: string;
@@ -36,3 +38,20 @@ export interface ProductsApiResponse {
   data: Product[];
   meta: PaginationMeta;
 }
+
+export const contactSchema = z.object({
+  fullName: z.string().min(3, 'Full name must be at least 3 characters'),
+
+  subject: z.string().min(3, 'Subject must be at least 3 characters'),
+
+  email: z
+    .string()
+    .trim()
+    .email('Invalid email format')
+    .regex(
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      'Email must be a valid format (example@domain.com)'
+    ),
+
+  message: z.string().min(10, 'Message must be at least 10 characters'),
+});
