@@ -153,10 +153,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                       <div className='flex items-center border rounded-md overflow-hidden'>
                         <button
                           onClick={() =>
-                            updateQuantity(
-                              item.id,
-                              Math.max(1, item.quantity - 1)
-                            )
+                            updateQuantity(item.id, Math.max(item.quantity - 1))
                           }
                           className='px-2 py-1 text-sm font-bold cursor-pointer'
                         >
@@ -220,7 +217,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                 <button
                   onClick={handleCheckout}
                   disabled={checkoutLoading}
-                  className='w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition flex items-center justify-center gap-2 disabled:opacity-70'
+                  className='w-full bg-black cursor-pointer text-white py-2 rounded-md hover:bg-gray-800 transition flex items-center justify-center gap-2 disabled:opacity-70'
                 >
                   {checkoutLoading && <Loader size='xs' color='white' />}
                   {checkoutLoading ? 'Processing...' : 'Checkout'}
