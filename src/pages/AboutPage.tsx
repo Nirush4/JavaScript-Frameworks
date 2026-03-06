@@ -1,10 +1,12 @@
 import { Container } from '@mantine/core';
+import Breadcrumbs from '../components/layout/Breadcrumbs';
 
 export default function AboutPage() {
   return (
-    <div className='bg-gray-50'>
+    <div className='bg-gray-50 pt-10'>
       <Container size='xl'>
-        <section className=' max-w-338 mx-auto py-10 sm:py-14 md:py-16 grid md:grid-cols-2 gap-8 md:gap-10 items-center'>
+        <Breadcrumbs />
+        <section className=' max-w-338 mx-auto py-5 sm:py-14 md:py-16 grid md:grid-cols-2 gap-8 md:gap-10 items-center'>
           <div>
             <h1 className='text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6'>
               About Our Store

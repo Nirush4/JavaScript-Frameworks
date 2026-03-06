@@ -35,8 +35,9 @@ export default function ProductDetailsLayout({
       autoClose: 3000,
       style: {
         borderRadius: '10px',
-        background: '#333',
-        color: '#fff',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+        background: '#f6f6f4',
+        color: '#000000',
         fontWeight: 'bold',
         fontSize: '14px',
       },

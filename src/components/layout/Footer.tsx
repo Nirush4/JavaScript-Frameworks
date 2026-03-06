@@ -7,6 +7,7 @@ const footerLinks = [
   { label: 'Products', href: '/products' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Terms & Conditions', href: '/termsconditions' },
 ];
 
 export default function Footer() {
