@@ -14,6 +14,7 @@ import ProductDetailsPage from './pages/ProductDetailsPage';
 
 import NotFoundPage from './pages/NotFoundPage';
 import CheckoutSuccessPage from './pages/CheckoutSuccess';
+import Terms from './pages/TermsConditions';
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       { path: 'about', element: <AboutPage /> },
       { path: 'contact', element: <ContactPage /> },
       { path: 'checkout/success', element: <CheckoutSuccessPage /> },
+      { path: 'termsconditions', element: <Terms /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
