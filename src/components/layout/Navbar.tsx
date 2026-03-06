@@ -65,16 +65,39 @@ export default function Navbar() {
 
   const navLinks = (
     <>
-      <NavLink to='/' className='text-black no-underline'>
+      <NavLink
+        to='/'
+        className={({ isActive }) =>
+          `text-black no-underline ${isActive ? 'font-bold' : 'font-normal'}`
+        }
+      >
         Home
       </NavLink>
-      <NavLink to='/products' className='text-black no-underline'>
+
+      <NavLink
+        to='/products'
+        className={({ isActive }) =>
+          `text-black no-underline ${isActive ? 'font-bold' : 'font-normal'}`
+        }
+      >
         Products
       </NavLink>
-      <NavLink to='/about' className='text-black no-underline'>
+
+      <NavLink
+        to='/about'
+        className={({ isActive }) =>
+          `text-black no-underline ${isActive ? 'font-bold' : 'font-normal'}`
+        }
+      >
         About
       </NavLink>
-      <NavLink to='/contact' className='text-black no-underline'>
+
+      <NavLink
+        to='/contact'
+        className={({ isActive }) =>
+          `text-black no-underline ${isActive ? 'font-bold' : 'font-normal'}`
+        }
+      >
         Contact
       </NavLink>
     </>

@@ -43,8 +43,9 @@ export default function ProductCard({ product }: ProductCardProps) {
       autoClose: 3000,
       style: {
         borderRadius: '10px',
-        background: '#333',
-        color: '#fff',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+        background: '#f6f6f4',
+        color: '#000000',
         fontWeight: 'bold',
         fontSize: '14px',
       },
@@ -111,7 +112,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <Button
-          className='w-full bg-black text-white py-1 sm:py-2 hover:bg-gray-700 transition text-sm sm:text-base cursor-pointer'
+          variant='filled'
+          color={'black'}
           aria-label={`Add ${title} to cart`}
           onClick={handleAddToCart}
         >
