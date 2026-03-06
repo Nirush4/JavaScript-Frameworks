@@ -55,7 +55,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div
       onClick={handleNavigate}
-      className='relative bg-white shadow-sm overflow-hidden transition-transform duration-300 hover:scale-[1.03] hover:shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500'
+      className='relative bg-white shadow-sm overflow-hidden transition-transform duration-300  rounded-2xl hover:scale-[1.02] hover:shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500'
       role='group'
       aria-labelledby={`product-title-${id}`}
       tabIndex={0}
@@ -113,7 +113,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         <Button
           variant='filled'
-          color={'black'}
+          color='black'
           aria-label={`Add ${title} to cart`}
           onClick={handleAddToCart}
         >

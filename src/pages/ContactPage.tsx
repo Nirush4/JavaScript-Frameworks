@@ -51,7 +51,7 @@ export default function ContactForm() {
   return (
     <Container size='xl' className='pt-10'>
       <Breadcrumbs />
-      <div className='max-w-xl p-5 mx-auto h-dvh mt-5 sm:mt-20'>
+      <div className='max-w-xl p-5 mx-auto h-dvh mt-5 sm:mt-17'>
         <h1 className='font-bold text-xl sm:text-3xl text-center pb-10'>
           Contact Us
         </h1>
@@ -59,6 +59,7 @@ export default function ContactForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextInput
             label='Full Name'
+            size='md'
             placeholder='John Doe'
             {...register('fullName')}
             error={errors.fullName?.message}
@@ -66,6 +67,7 @@ export default function ContactForm() {
           />
           <TextInput
             label='Subject'
+            size='md'
             placeholder='Your subject'
             {...register('subject')}
             error={errors.subject?.message}
@@ -73,6 +75,7 @@ export default function ContactForm() {
           />
           <TextInput
             label='Email'
+            size='md'
             placeholder='example@email.com'
             type='email'
             {...register('email')}
@@ -81,6 +84,7 @@ export default function ContactForm() {
           />
           <Textarea
             label='Message'
+            size='md'
             placeholder='Your message...'
             minRows={4}
             {...register('message')}
@@ -88,7 +92,7 @@ export default function ContactForm() {
             mb='sm'
           />
           <Group gap='right' mt='md'>
-            <Button type='submit' color='blue' loading={loading}>
+            <Button type='submit' color='blue' size='md' loading={loading}>
               Send Message
             </Button>
           </Group>

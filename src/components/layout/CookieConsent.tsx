@@ -19,7 +19,7 @@ export default function CookieConsent() {
   if (!visible) return null;
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm'>
+    <div className='fixed inset-0 z-5000 flex items-center justify-center backdrop-blur-sm'>
       <div className='bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 mx-6 text-gray-900'>
         <div className='flex flex-col space-y-4'>
           <h2 className='text-lg sm:text-2xl font-extrabold'>
