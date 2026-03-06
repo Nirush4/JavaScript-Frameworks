@@ -161,7 +161,7 @@ export default function ProductDetailsLayout({
                   type='button'
                   onClick={() => handleQuantityChange(quantity - 1)}
                   disabled={quantity <= 1}
-                  className='px-3 py-1 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition'
+                  className='px-3 py-1 hover:bg-gray-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition'
                   aria-label='Decrease quantity'
                 >
                   −
@@ -177,7 +177,7 @@ export default function ProductDetailsLayout({
                 <button
                   type='button'
                   onClick={() => handleQuantityChange(quantity + 1)}
-                  className='px-3 py-1 hover:bg-gray-100 transition'
+                  className='px-3 py-1 hover:bg-gray-100 transition cursor-pointer'
                   aria-label='Increase quantity'
                 >
                   +
