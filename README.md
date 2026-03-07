@@ -1,75 +1,80 @@
-# React + TypeScript + Vite
+# Online Shop Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
 
-Currently, two official plugins are available:
+This project is a fully functional online shop built using **React**, and **TypeScript**. It allows users to browse products, view details, search and sort items, manage a shopping cart, complete a checkout flow, and submit a validated contact form. The project emphasizes responsive design, clean user interface, and type-safe code.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- **Product Listing:** Browse all products in a user-friendly grid layout with images, titles, prices (original and discounted), ratings, and discount badges.
+- **Product Details:** Click a product to view detailed information including description, reviews, tags, and “Add to Cart” functionality.
+- **Search & Sort:** Search for products and sort results dynamically from the homepage.
+- **Shopping Cart:** Add/remove items, adjust quantities, view total costs, and see cart count in the header.
+- **Checkout Flow:** Checkout flow with confirmation and cart clearing.
+- **Contact Form:** TypeScript-based form validation with full name, subject, email, and message fields.
+- **Responsive Design:** Fully optimized for desktop, tablet, and mobile devices.
+- **Breadcrumbs Navigation:** Dynamic breadcrumbs implemented for easy navigation.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## 🧠 Tech Stack
 
-Note: This will impact Vite dev & build performances.
+| Category         | Technology             |
+| ---------------- | ---------------------- |
+| Frameworks       | React + TypeScript     |
+| State Management | Zustand                |
+| API Fetching     | Agios, TanStack Query  |
+| Routing          | React Router     |
+| Styling          | Tailwind CSS, Mantine  |
+| Form Validation  | Zod                    |
+| Build Tool       | Vite                   |
+| Hosting          | Netlify                |
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ⚙️ Setup Instructions
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Node.js v18+
+- npm
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Nirush4/JavaScript-Frameworks
+cd JavaScript-Frameworks
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Install Dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+## Run the Application
+
+```bash
+npm run dev
+```
+
+- The app will run locally (default: http://localhost:5173).
+
+### AI Usage Log
+
+This log records AI assistance used in the Online Shop Project.  
+
+| Date         | Purpose                                         | Outcome                                     |
+|-------------|-------------------------------------------------|--------------------------------------------|
+| 3 Mar 2026  | Debugged breadcrumbs                            | Fixed issues; code written independently   |
+| 4 Mar 2026  | Explained React, TypeScript, and library concepts | Better understanding of code               |
+| 7 Mar 2026  | Generated placeholder content (Terms & About)   | Used content only; integrated independently|
+
+### License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+### Author 👨‍💻​
+
+• Nirushan Rajamanoharan [@Nirush4](https://github.com/Nirush4)
+
+**Happy coding!**
