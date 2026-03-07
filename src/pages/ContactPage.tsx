@@ -65,7 +65,7 @@ export default function ContactForm() {
   };
 
   return (
-    <Container size='xl' className='pt-10'>
+    <Container size='xl' className='pt-10 pb-15'>
       <Breadcrumbs />
 
       <div className='text-center mt-10 mx-auto'>
