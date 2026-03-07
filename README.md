@@ -63,9 +63,9 @@ This log records AI assistance used in the Online Shop Project.
 
 | Date         | Purpose                                         | Outcome                                     |
 |-------------|-------------------------------------------------|--------------------------------------------|
-| 3 Mar 2026  | Debugged breadcrumbs                            | Fixed issues; code written independently   |
+| 3 Mar 2026  | Debugged breadcrumbs                            | Fixed issues, code written independently   |
 | 4 Mar 2026  | Explained React, TypeScript, and library concepts | Better understanding of code               |
-| 7 Mar 2026  | Generated placeholder content (Terms & About)   | Used content only; integrated independently|
+| 7 Mar 2026  | Generated placeholder content (Terms & About)   | Used content only, integrated independently|
 
 ### License
 
