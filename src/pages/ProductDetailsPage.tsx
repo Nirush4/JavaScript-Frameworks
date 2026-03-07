@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
 import { useProduct } from '../hooks/useProduct';
 import ProductDetailsLayout from '../components/layout/ProductDetailsLayout';
-import Breadcrumbs from '../components/layout/Breadcrumbs'; // 👈 custom breadcrumbs
+import Breadcrumbs from '../components/layout/Breadcrumbs';
 import { Container } from '@mantine/core';
 
 export default function ProductDetailsPage() {
