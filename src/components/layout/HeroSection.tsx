@@ -10,10 +10,8 @@ export default function HeroSection() {
           "url('https://img.freepik.com/free-photo/happy-couple-having-fun-while-online-shopping-home_637285-12597.jpg?semt=ais_user_personalization&w=740&q=80')",
       }}
     >
-      {/* Overlay */}
       <div className='absolute inset-0 bg-black/50' aria-hidden='true'></div>
 
-      {/* Content */}
       <div className='relative z-10 flex flex-col items-center container mx-auto px-4 lg:px-0 text-left sm:text-center'>
         <h1
           id='hero-heading'
