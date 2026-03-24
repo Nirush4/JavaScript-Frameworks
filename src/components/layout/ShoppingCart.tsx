@@ -32,7 +32,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
 
     setTimeout(() => {
       clearCart();
-      navigate('/checkout/success');
+      navigate('checkout/payment');
       setCheckoutLoading(false);
       onClose();
     }, 1200);

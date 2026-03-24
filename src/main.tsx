@@ -15,6 +15,7 @@ import ProductDetailsPage from './pages/ProductDetailsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import CheckoutSuccessPage from './pages/CheckoutSuccess';
 import Terms from './pages/TermsConditions';
+import PaymentMethodPage from './pages/PaymentMethod';
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       { path: 'products/:id', element: <ProductDetailsPage /> },
       { path: 'about', element: <AboutPage /> },
       { path: 'contact', element: <ContactPage /> },
+      { path: 'checkout/payment', element: <PaymentMethodPage /> },
       { path: 'checkout/success', element: <CheckoutSuccessPage /> },
       { path: 'termsconditions', element: <Terms /> },
       { path: '*', element: <NotFoundPage /> },
