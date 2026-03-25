@@ -1,49 +1,20 @@
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-
-const sampleOrderItems = [
-  {
-    id: 1,
-    name: 'External Hard Drive',
-    quantity: 1,
-    price: 149.99,
-    image: 'https://placehold.co/48x48',
-  },
-  {
-    id: 2,
-    name: 'Gold headphones',
-    quantity: 1,
-    price: 382.49,
-    image: 'https://placehold.co/48x48',
-  },
-];
+import { checkoutSchema } from '../types/checkoutSchema';
+import { useCartStore } from '../store/cartStore';
+import { formatExpiryInput } from '../utils/formatters';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Loader } from '@mantine/core';
 
 function formatPrice(num: number) {
-  return `$${num.toFixed(2)}`;
+  return num.toLocaleString('nb-NO', {
+    style: 'currency',
+    currency: 'NOK',
+    minimumFractionDigits: 0,
+  });
 }
-
-const checkoutSchema = z.object({
-  fullName: z.string().min(1, 'Full Name is required'),
-  email: z.string().email('Invalid email address'),
-  street: z.string().min(1, 'Street Address is required'),
-  city: z.string().min(1, 'City is required'),
-  postalCode: z
-    .string()
-    .regex(/^\d{1,4}$/, 'Postal code must be 1 to 4 digits'),
-  country: z.string().min(1, 'Country is required'),
-  cardHolder: z.string().min(1, 'Cardholder Name is required'),
-  cardNumber: z
-    .string()
-    .regex(
-      /^\d{4} \d{4} \d{4} \d{4}$/,
-      'Card number must be in format 1234 5678 9012 3456'
-    ),
-  expiryDate: z
-    .string()
-    .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Expiry date must be in MM/YY format'),
-  cvc: z.string().regex(/^\d+$/, 'CVC must be numbers'),
-});
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
 
@@ -54,38 +25,30 @@ function formatCardNumber(value: string) {
     .trim();
 }
 
-function formatExpiry(value: string) {
-  return value
-    .replace(/\D/g, '')
-    .replace(/^([2-9])$/, '0$1')
-    .replace(/^(\d\d)(\d)$/g, '$1/$2')
-    .slice(0, 5);
-}
-
 export default function Checkout() {
+  const items = useCartStore((state) => state.items);
+  const totalPrice = useCartStore((state) => state.totalPrice);
+  const clearCart = useCartStore((state) => state.clearCart);
+
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
+    control,
     formState: { errors },
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
     mode: 'onBlur',
   });
 
-  const onSubmit = (data: CheckoutFormData) => {
-    alert('Form submitted!\n' + JSON.stringify(data, null, 2));
-  };
+  const navigate = useNavigate();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
-  const cardHolder = watch('cardHolder');
-  const cardNumber = watch('cardNumber');
-  const expiryDate = watch('expiryDate');
+  const cardHolder = useWatch({ control, name: 'cardHolder' });
+  const cardNumber = useWatch({ control, name: 'cardNumber' });
+  const expiryDate = useWatch({ control, name: 'expiryDate' });
 
-  const subtotal = sampleOrderItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
+  const subtotal = totalPrice();
   const shippingCost = 0;
   const total = subtotal + shippingCost;
 
@@ -94,110 +57,134 @@ export default function Checkout() {
     setValue('cardNumber', formatted, { shouldValidate: true });
   };
 
-  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatExpiry(e.target.value);
+  const handleExpiryChange = (value: string) => {
+    const formatted = formatExpiryInput(value);
     setValue('expiryDate', formatted, { shouldValidate: true });
+  };
+
+  const onSubmit = () => {
+    setCheckoutLoading(true);
+
+    setTimeout(() => {
+      clearCart();
+      navigate('/checkout/success');
+      setCheckoutLoading(false);
+    }, 1200);
   };
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='max-w-6xl mx-auto p-8 grid grid-cols-1 md:grid-cols-3 gap-10 font-sans text-gray-900'
+      className='max-w-7xl mx-auto p-8 mt-2 pb-20 grid grid-cols-1 md:grid-cols-3 gap-10 font-sans text-gray-900'
       noValidate
     >
-      <div className='md:col-span-2 space-y-10'>
-        <h1 className='text-3xl font-bold mb-6'>Checkout</h1>
+      <div className='md:col-span-2 space-y-8'>
+        <h1 className='text-2xl sm:text-4xl font-medium tracking-tight font-serif leading-tight'>
+          Checkout
+        </h1>
 
-        <section className='bg-white p-6 rounded-lg shadow space-y-6'>
-          <h2 className='text-xl font-semibold mb-4'>Shipping Information</h2>
-          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+        <section className='bg-gray-100 border border-gray-200 rounded-2xl p-8 space-y-8'>
+          <h2 className='text-2xl font-light tracking-tight font-serif leading-tight'>
+            Shipping Information
+          </h2>
+
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
             <div>
               <input
                 type='text'
                 placeholder='Full Name'
                 {...register('fullName')}
-                className={`input-field ${
-                  errors.fullName ? 'border-red-500' : ''
-                }`}
+                className={`w-full px-3 py-2.5 text-sm border rounded-lg bg-white transition
+                  focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
+                  ${errors.fullName ? 'border-red-500' : 'border-gray-200'}`}
               />
               {errors.fullName && (
-                <p className='text-red-600 text-sm mt-1'>
+                <p className='text-xs text-red-500 mt-1'>
                   {errors.fullName.message}
                 </p>
               )}
             </div>
+
             <div>
               <input
                 type='email'
                 placeholder='Email'
                 {...register('email')}
-                className={`input-field ${
-                  errors.email ? 'border-red-500' : ''
-                }`}
+                className={`w-full px-3 py-2.5 text-sm border rounded-lg bg-white transition
+                  focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
+                  ${errors.email ? 'border-red-500' : 'border-gray-200'}`}
               />
               {errors.email && (
-                <p className='text-red-600 text-sm mt-1'>
+                <p className='text-xs text-red-500 mt-1'>
                   {errors.email.message}
                 </p>
               )}
             </div>
           </div>
+
           <div>
             <input
               type='text'
               placeholder='Street Address'
               {...register('street')}
-              className={`input-field ${errors.street ? 'border-red-500' : ''}`}
+              className={`w-full px-3 py-2.5 text-sm border rounded-lg bg-white transition
+                focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
+                ${errors.street ? 'border-red-500' : 'border-gray-200'}`}
             />
             {errors.street && (
-              <p className='text-red-600 text-sm mt-1'>
+              <p className='text-xs text-red-500 mt-1'>
                 {errors.street.message}
               </p>
             )}
           </div>
-          <div className='grid grid-cols-3 gap-4'>
+
+          <div className='grid grid-cols-3 gap-5'>
             <div>
               <input
                 type='text'
                 placeholder='City'
                 {...register('city')}
-                className={`input-field ${errors.city ? 'border-red-500' : ''}`}
+                className={`w-full px-3 py-2.5 text-sm border rounded-lg bg-white transition
+                  focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
+                  ${errors.city ? 'border-red-500' : 'border-gray-200'}`}
               />
               {errors.city && (
-                <p className='text-red-600 text-sm mt-1'>
+                <p className='text-xs text-red-500 mt-1'>
                   {errors.city.message}
                 </p>
               )}
             </div>
+
             <div>
               <input
                 type='text'
                 placeholder='Postal Code'
-                {...register('postalCode')}
                 maxLength={4}
+                {...register('postalCode')}
                 onInput={(e: React.FormEvent<HTMLInputElement>) => {
                   e.currentTarget.value = e.currentTarget.value.replace(
                     /\D/g,
                     ''
                   );
                 }}
-                className={`input-field ${
-                  errors.postalCode ? 'border-red-500' : ''
-                }`}
+                className={`w-full px-3 py-2.5 text-sm border rounded-lg bg-white transition
+                  focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
+                  ${errors.postalCode ? 'border-red-500' : 'border-gray-200'}`}
               />
               {errors.postalCode && (
-                <p className='text-red-600 text-sm mt-1'>
+                <p className='text-xs text-red-500 mt-1'>
                   {errors.postalCode.message}
                 </p>
               )}
             </div>
+
             <div>
               <select
                 {...register('country')}
-                className={`input-field ${
-                  errors.country ? 'border-red-500' : ''
-                }`}
                 defaultValue=''
+                className={`w-full px-3 py-2.5 text-sm border rounded-lg bg-white transition
+                  focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
+                  ${errors.country ? 'border-red-500' : 'border-gray-200'}`}
               >
                 <option value=''>Select country</option>
                 <option value='Norway'>Norway</option>
@@ -207,7 +194,7 @@ export default function Checkout() {
                 <option value='France'>France</option>
               </select>
               {errors.country && (
-                <p className='text-red-600 text-sm mt-1'>
+                <p className='text-xs text-red-500 mt-1'>
                   {errors.country.message}
                 </p>
               )}
@@ -215,181 +202,160 @@ export default function Checkout() {
           </div>
         </section>
 
-        <section className='bg-white p-6 rounded-lg shadow space-y-6'>
-          <h2 className='text-xl font-semibold mb-4 flex items-center gap-2'>
-            <span>Payment</span>
-            <span
-              title='Secure checkout'
-              className='text-gray-400 text-sm'
-              aria-label='Secure checkout'
-            >
-              🔒
-            </span>
+        <section className='bg-gray-100 border border-gray-200 rounded-2xl p-8 space-y-8'>
+          <h2 className='text-2xl font-light tracking-tight font-serif leading-tight flex items-center gap-2'>
+            Payment
+            <span className='text-gray-400 text-sm'>🔒 Secure</span>
           </h2>
 
-          <div className='bg-gradient-to-tr from-blue-900 to-blue-700 rounded-xl p-6 w-full max-w-sm mx-auto text-white font-mono tracking-widest shadow-lg relative select-none'>
-            <div className='mb-8 flex justify-between'>
-              <div>💳</div>
-              <div className='text-sm'>Credit Card</div>
+          <div className='bg-linear-to-br from-gray-900 to-gray-800 rounded-2xl p-6 w-full max-w-sm mx-auto text-white shadow-sm'>
+            <div className='mb-10 flex justify-between items-center'>
+              <span className='text-xs opacity-60 tracking-wide'>
+                Credit Card
+              </span>
+              <span className='text-lg'>💳</span>
             </div>
-            <div className='text-xl tracking-[0.3em] mb-6 min-h-[2.5rem]'>
+
+            <div className='text-xl tracking-[0.25em] mb-6'>
               {cardNumber || '•••• •••• •••• ••••'}
             </div>
-            <div className='flex justify-between text-xs uppercase'>
+
+            <div className='flex justify-between text-xs uppercase tracking-wider'>
               <div>
-                <div className='opacity-60'>Cardholder</div>
-                <div>{cardHolder ? cardHolder.toUpperCase() : 'Your Name'}</div>
+                <div className='opacity-50'>Cardholder</div>
+                <div>{cardHolder || 'Your Name'}</div>
               </div>
               <div className='text-right'>
-                <div className='opacity-60'>Expires</div>
+                <div className='opacity-50'>Expires</div>
                 <div>{expiryDate || 'MM/YY'}</div>
               </div>
             </div>
           </div>
 
-          <div className='space-y-4 max-w-sm mx-auto'>
-            <div>
+          <div className='space-y-5 max-w-sm mx-auto'>
+            <input
+              type='text'
+              placeholder='Cardholder Name'
+              {...register('cardHolder')}
+              className={`w-full px-3 py-2.5 text-sm border bg-white rounded-lg transition
+                focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
+                ${errors.cardHolder ? 'border-red-500' : 'border-gray-200'}`}
+            />
+
+            <input
+              type='text'
+              placeholder='Card Number'
+              maxLength={19}
+              value={cardNumber || ''}
+              onChange={handleCardNumberChange}
+              className={`w-full px-3 py-2.5 text-sm border bg-white rounded-lg transition
+                focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
+                ${errors.cardNumber ? 'border-red-500' : 'border-gray-200'}`}
+            />
+
+            <div className='grid grid-cols-2 gap-5'>
               <input
                 type='text'
-                placeholder='Cardholder Name'
-                {...register('cardHolder')}
-                className={`input-field ${
-                  errors.cardHolder ? 'border-red-500' : ''
-                }`}
+                placeholder='Expiry Date (MM/YY)'
+                maxLength={5}
+                value={expiryDate || ''}
+                onChange={(e) => handleExpiryChange(e.target.value)}
+                className={`w-full px-3 py-2.5 text-sm border bg-white rounded-lg transition
+                  focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
+                  ${errors.expiryDate ? 'border-red-500' : 'border-gray-200'}`}
               />
-              {errors.cardHolder && (
-                <p className='text-red-600 text-sm mt-1'>
-                  {errors.cardHolder.message}
-                </p>
-              )}
-            </div>
-            <div>
+
               <input
                 type='text'
-                placeholder='Card Number'
-                maxLength={19}
-                value={cardNumber}
-                onChange={handleCardNumberChange}
-                className={`input-field ${
-                  errors.cardNumber ? 'border-red-500' : ''
-                }`}
+                placeholder='CVC'
+                maxLength={3}
+                {...register('cvc')}
+                onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                  e.currentTarget.value = e.currentTarget.value.replace(
+                    /\D/g,
+                    ''
+                  );
+                }}
+                className={`w-full px-3 py-2.5 text-sm bg-white border rounded-lg transition
+                  focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
+                  ${errors.cvc ? 'border-red-500' : 'border-gray-200'}`}
               />
-              {errors.cardNumber && (
-                <p className='text-red-600 text-sm mt-1'>
-                  {errors.cardNumber.message}
-                </p>
-              )}
-            </div>
-            <div className='grid grid-cols-2 gap-4'>
-              <div>
-                <input
-                  type='text'
-                  placeholder='Expiry Date (MM/YY)'
-                  maxLength={5}
-                  value={expiryDate}
-                  onChange={handleExpiryChange}
-                  className={`input-field ${
-                    errors.expiryDate ? 'border-red-500' : ''
-                  }`}
-                />
-                {errors.expiryDate && (
-                  <p className='text-red-600 text-sm mt-1'>
-                    {errors.expiryDate.message}
-                  </p>
-                )}
-              </div>
-              <div>
-                <input
-                  type='text'
-                  placeholder='CVC'
-                  {...register('cvc')}
-                  maxLength={4}
-                  onInput={(e: React.FormEvent<HTMLInputElement>) => {
-                    e.currentTarget.value = e.currentTarget.value.replace(
-                      /\D/g,
-                      ''
-                    );
-                  }}
-                  className={`input-field ${
-                    errors.cvc ? 'border-red-500' : ''
-                  }`}
-                />
-                {errors.cvc && (
-                  <p className='text-red-600 text-sm mt-1'>
-                    {errors.cvc.message}
-                  </p>
-                )}
-              </div>
             </div>
 
             <button
               type='submit'
-              className='w-full mt-6 bg-red-600 text-white font-semibold py-3 rounded hover:bg-red-700 transition'
+              className='w-full bg-black cursor-pointer text-white py-2 rounded-md hover:bg-gray-800 transition flex items-center justify-center gap-2 disabled:opacity-70'
+              disabled={checkoutLoading}
             >
-              Pay {formatPrice(total)}
+              {checkoutLoading && <Loader size='xs' color='white' />}
+              {checkoutLoading ? 'Processing...' : `Pay ${formatPrice(total)}`}
             </button>
           </div>
         </section>
       </div>
 
-      <aside className='bg-white p-6 rounded-lg shadow space-y-4 max-w-sm md:sticky md:top-8 self-start'>
-        <h2 className='text-xl font-semibold mb-4'>Order Summary</h2>
+      <aside className='bg-gray-100 backdrop-blur border border-gray-200 rounded-2xl p-6 mt-19 space-y-6 max-w-sm md:sticky md:top-25 self-start'>
+        <div className='flex items-center justify-between'>
+          <h2 className='text-2xl font-light tracking-tight font-serif leading-tight'>
+            Order Summary
+          </h2>
+          <span className='text-sm text-gray-400'>
+            {items.length} item{items.length > 1 ? 's' : ''}
+          </span>
+        </div>
 
         <div className='space-y-4'>
-          {sampleOrderItems.map((item) => (
-            <div key={item.id} className='flex items-center gap-3'>
-              <img
-                src={item.image}
-                alt={item.name}
-                className='w-12 h-12 rounded object-cover'
-              />
-              <div className='flex-1'>
-                <p className='font-medium'>{item.name}</p>
-                <p className='text-xs text-gray-500'>
-                  Qty: {item.quantity} x {formatPrice(item.price)}
+          {items.map((item) => (
+            <div key={item.id} className='flex gap-3 items-start'>
+              <div className='w-14 h-14 rounded-xl overflow-hidden bg-gray-100 border'>
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className='w-full h-full object-cover'
+                />
+              </div>
+              <div className='flex-1 min-w-0'>
+                <p className='text-sm font-medium text-gray-900 line-clamp-2'>
+                  {item.title}
+                </p>
+                <p className='text-xs text-gray-500 mt-1'>
+                  Qty {item.quantity} × {formatPrice(item.price)}
                 </p>
               </div>
-              <div className='font-semibold'>{formatPrice(item.price)}</div>
+              <div className='text-sm font-semibold text-gray-900 whitespace-nowrap'>
+                {formatPrice(item.price * item.quantity)}
+              </div>
             </div>
           ))}
         </div>
 
-        <hr />
+        <div className='border-t border-gray-200' />
 
-        <div className='flex justify-between text-sm text-gray-600'>
-          <span>Items ({sampleOrderItems.length})</span>
-          <span>{formatPrice(subtotal)}</span>
+        <div className='space-y-3 text-sm'>
+          <div className='flex justify-between text-gray-600'>
+            <span>Subtotal</span>
+            <span>{formatPrice(subtotal)}</span>
+          </div>
+
+          <div className='flex justify-between text-gray-600'>
+            <span>Shipping</span>
+            <span className='text-green-600 font-medium'>Free</span>
+          </div>
         </div>
 
-        <div className='flex justify-between text-sm text-green-600 font-medium'>
-          <span>Shipping</span>
-          <span>Free</span>
+        <div className='border-t border-gray-200' />
+
+        <div className='flex justify-between items-center'>
+          <span className='text-base font-semibold text-gray-900'>Total</span>
+          <span className='text-xl font-bold text-gray-900 tracking-tight'>
+            {formatPrice(total)}
+          </span>
         </div>
 
-        <div className='flex justify-between text-lg font-bold mt-2'>
-          <span>Total</span>
-          <span>{formatPrice(total)}</span>
-        </div>
+        <p className='text-xs text-gray-400 text-center pt-2'>
+          Taxes included • Secure checkout
+        </p>
       </aside>
-
-      <style>{`
-        .input-field {
-          width: 100%;
-          padding: 0.5rem 0.75rem;
-          border: 1px solid #d1d5db;
-          border-radius: 0.375rem;
-          font-size: 1rem;
-          transition: border-color 0.2s ease;
-        }
-        .input-field:focus {
-          outline: none;
-          border-color: #2563eb;
-          box-shadow: 0 0 0 3px rgb(37 99 235 / 0.3);
-        }
-        .border-red-500 {
-          border-color: #ef4444 !important;
-        }
-      `}</style>
     </form>
   );
 }

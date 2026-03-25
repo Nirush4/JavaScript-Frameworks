@@ -27,11 +27,10 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
     onClose();
   };
 
-  const handleCheckout = () => {
+  const handlePayment = () => {
     setCheckoutLoading(true);
 
     setTimeout(() => {
-      clearCart();
       navigate('checkout/payment');
       setCheckoutLoading(false);
       onClose();
@@ -215,7 +214,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                 </button>
 
                 <button
-                  onClick={handleCheckout}
+                  onClick={handlePayment}
                   disabled={checkoutLoading}
                   className='w-full bg-black cursor-pointer text-white py-2 rounded-md hover:bg-gray-800 transition flex items-center justify-center gap-2 disabled:opacity-70'
                 >
