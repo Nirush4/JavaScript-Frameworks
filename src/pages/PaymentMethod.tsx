@@ -62,19 +62,29 @@ export default function Checkout() {
     setValue('expiryDate', formatted, { shouldValidate: true });
   };
 
-  const onSubmit = () => {
+  // const onSubmit = () => {
+  //   setCheckoutLoading(true);
+
+  //   setTimeout(() => {
+  //     clearCart();
+  //     navigate('/checkout/success');
+  //     setCheckoutLoading(false);
+  //   }, 1200);
+  // };
+
+  const handlePayment = (data: CheckoutFormData) => {
     setCheckoutLoading(true);
 
     setTimeout(() => {
       clearCart();
-      navigate('/checkout/success');
+      navigate('/checkout/success', { state: { items, formData: data } });
       setCheckoutLoading(false);
     }, 1200);
   };
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handlePayment)}
       className='max-w-7xl mx-auto p-8 mt-2 pb-20 grid grid-cols-1 md:grid-cols-3 gap-10 font-sans text-gray-900'
       noValidate
     >
