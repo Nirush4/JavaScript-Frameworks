@@ -1,18 +1,35 @@
-import { Center, Loader, Text, Pagination } from '@mantine/core';
+import { Center, Text, Pagination } from '@mantine/core';
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useProducts } from '../../hooks/useProducts';
 import ProductCard from './ProductCard';
+import ProductCardSkeleton from './ProductCardSkeleton';
 
 const ITEMS_PER_PAGE = 12;
 
 type sortList = 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc';
 
+function ProductsGridSkeleton() {
+  return (
+    <>
+      <div className='flex justify-end mb-6'>
+        <div className='w-40'>
+          <ProductCardSkeleton type='input' />
+        </div>
+      </div>
+
+      <div className='grid gap-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+        {Array.from({ length: 12 }).map((_, index) => (
+          <ProductCardSkeleton key={index} />
+        ))}
+      </div>
+    </>
+  );
+}
+
 export default function AllProductsSection() {
   const [page, setPage] = useState(1);
-  const [sortOption, setSortOption] = useState<
-    'price-asc' | 'price-desc' | 'name-asc' | 'name-desc'
-  >('price-asc');
+  const [sortOption, setSortOption] = useState<sortList>('price-asc');
   const [searchParams] = useSearchParams();
 
   const search = searchParams.get('search') || '';
@@ -70,13 +87,6 @@ export default function AllProductsSection() {
       ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  if (isLoading)
-    return (
-      <Center className='h-[50vh]'>
-        <Loader size='lg' />
-      </Center>
-    );
-
   if (isError)
     return (
       <Center className='h-[50vh]'>
@@ -98,40 +108,46 @@ export default function AllProductsSection() {
         </h2>
       </div>
 
-      {isSearching && filteredProducts.length === 0 && (
-        <Center className='py-20'>
-          <Text size='lg'>No products found.</Text>
-        </Center>
-      )}
+      {isLoading ? (
+        <ProductsGridSkeleton />
+      ) : (
+        <>
+          {isSearching && filteredProducts.length === 0 && (
+            <Center className='py-20'>
+              <Text size='lg'>No products found.</Text>
+            </Center>
+          )}
 
-      <div className='flex justify-end mb-6'>
-        <select
-          value={sortOption}
-          onChange={(e) => setSortOption(e.target.value as sortList)}
-          className='border border-gray-300 rounded px-3 py-1'
-        >
-          <option value='price-asc'>Price: Low to High</option>
-          <option value='price-desc'>Price: High to Low</option>
-          <option value='name-asc'>Name: A → Z</option>
-          <option value='name-desc'>Name: Z → A</option>
-        </select>
-      </div>
+          <div className='flex justify-end mb-6'>
+            <select
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value as sortList)}
+              className='border border-gray-300 rounded px-3 py-1'
+            >
+              <option value='price-asc'>Price: Low to High</option>
+              <option value='price-desc'>Price: High to Low</option>
+              <option value='name-asc'>Name: A → Z</option>
+              <option value='name-desc'>Name: Z → A</option>
+            </select>
+          </div>
 
-      <div className='grid gap-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-        {paginatedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+          <div className='grid gap-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+            {paginatedProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
 
-      {totalPages > 1 && (
-        <div className='flex justify-center py-20'>
-          <Pagination
-            value={page}
-            color='black'
-            onChange={handlePageChange}
-            total={totalPages}
-          />
-        </div>
+          {totalPages > 1 && (
+            <div className='flex justify-center py-20'>
+              <Pagination
+                value={page}
+                color='black'
+                onChange={handlePageChange}
+                total={totalPages}
+              />
+            </div>
+          )}
+        </>
       )}
     </section>
   );
