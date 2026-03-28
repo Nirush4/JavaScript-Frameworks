@@ -1,5 +1,5 @@
 import { Center, Text, Pagination } from '@mantine/core';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, type JSX } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useProducts } from '../../hooks/useProducts';
 import ProductCard from './ProductCard';
@@ -9,7 +9,7 @@ const ITEMS_PER_PAGE = 12;
 
 type sortList = 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc';
 
-function ProductsGridSkeleton() {
+function ProductsGridSkeleton(): JSX.Element {
   return (
     <>
       <div className='flex justify-end mb-6'>

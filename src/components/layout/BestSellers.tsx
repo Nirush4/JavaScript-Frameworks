@@ -1,8 +1,9 @@
 import { Center, Container, Loader, Text } from '@mantine/core';
 import { useProducts } from '../../hooks/useProducts';
 import { useNavigate } from 'react-router-dom';
+import type { JSX } from 'react';
 
-export default function BestSellersSection() {
+export default function BestSellersSection(): JSX.Element {
   const { data, isLoading, isError } = useProducts(1);
   const navigate = useNavigate();
 

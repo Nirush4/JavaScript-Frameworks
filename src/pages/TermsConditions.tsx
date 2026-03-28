@@ -1,6 +1,7 @@
 import { Container, Title, Text, Stack, Divider } from '@mantine/core';
+import type { JSX } from 'react';
 
-export default function Terms() {
+export default function Terms(): JSX.Element {
   return (
     <Container size='md' my='lg' py='xl'>
       <Stack gap='lg'>
