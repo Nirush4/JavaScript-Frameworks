@@ -15,8 +15,9 @@ import {
 } from '@mantine/core';
 import { IconCircleCheck } from '@tabler/icons-react';
 import type { CartItem } from '../store/cartStore';
+import type { JSX } from 'react';
 
-export default function CheckoutSuccessPage() {
+export default function CheckoutSuccessPage(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
 

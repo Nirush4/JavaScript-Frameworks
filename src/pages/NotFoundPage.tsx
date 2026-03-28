@@ -1,8 +1,8 @@
 import { Button, Container, Text, Title, Space } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import React from 'react';
+import { type JSX } from 'react';
 
-const NotFoundPage: React.FC = () => {
+const NotFoundPage = (): JSX.Element => {
   const navigate = useNavigate();
 
   return (

@@ -5,7 +5,7 @@ import { checkoutSchema } from '../types/checkoutSchema';
 import { useCartStore } from '../store/cartStore';
 import { formatExpiryInput } from '../utils/formatters';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import { Loader } from '@mantine/core';
 
 function formatPrice(num: number) {
@@ -25,7 +25,7 @@ function formatCardNumber(value: string) {
     .trim();
 }
 
-export default function Checkout() {
+export default function Checkout(): JSX.Element {
   const items = useCartStore((state) => state.items);
   const totalPrice = useCartStore((state) => state.totalPrice);
   const clearCart = useCartStore((state) => state.clearCart);

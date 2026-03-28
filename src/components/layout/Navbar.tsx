@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type JSX } from 'react';
 import {
   AppShell,
   Container,
@@ -20,7 +20,7 @@ import ShoppingCart from './ShoppingCart';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useRef } from 'react';
 
-export default function Navbar() {
+export default function Navbar(): JSX.Element {
   const [opened, setOpened] = useState(false);
   const [cartOpened, setCartOpened] = useState(false);
 

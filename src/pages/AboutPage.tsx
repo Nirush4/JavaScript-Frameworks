@@ -1,7 +1,8 @@
 import { Container } from '@mantine/core';
 import Breadcrumbs from '../components/layout/Breadcrumbs';
+import type { JSX } from 'react';
 
-export default function AboutPage() {
+export default function AboutPage(): JSX.Element {
   return (
     <div className='bg-gray-50 pt-10'>
       <Container size='xl'>

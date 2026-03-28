@@ -1,6 +1,7 @@
+import type { JSX } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function HeroSection() {
+export default function HeroSection(): JSX.Element {
   return (
     <section
       aria-labelledby='hero-heading'

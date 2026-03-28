@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { contactSchema } from '../types/product';
@@ -15,7 +15,7 @@ import {
 import { Check } from 'tabler-icons-react';
 import Breadcrumbs from '../components/layout/Breadcrumbs';
 
-export default function ContactForm() {
+export default function ContactForm(): JSX.Element {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import { FaInstagram, FaFacebook, FaTwitter } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ const footerLinks = [
   { label: 'Terms & Conditions', href: '/termsconditions' },
 ];
 
-export default function Footer() {
+export default function Footer(): JSX.Element {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
