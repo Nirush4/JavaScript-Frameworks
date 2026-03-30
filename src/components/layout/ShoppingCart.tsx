@@ -55,7 +55,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
       />
 
       <div
-        className={`fixed top-0 right-0 h-screen w-full max-w-md bg-white z-[9999] shadow-xl 
+        className={`fixed top-0 right-0 h-screen w-full max-w-lg bg-white z-[9999] shadow-xl 
           transform transition-transform duration-300 flex flex-col
           ${opened ? 'translate-x-0' : 'translate-x-full'}`}
       >

@@ -138,12 +138,12 @@ export default function Navbar(): JSX.Element {
             </div>
 
             <ActionIcon variant='subtle' color='dark' aria-label='User account'>
-              <IconUser size={20} aria-hidden='true' />
+              <IconUser size={22} aria-hidden='true' />
             </ActionIcon>
 
             <Indicator
               label={totalItems > 20 ? '20+' : totalItems}
-              size={18}
+              size={22}
               disabled={totalItems === 0}
               color='red'
               offset={6}
