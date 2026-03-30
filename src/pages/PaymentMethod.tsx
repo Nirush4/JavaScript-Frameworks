@@ -62,16 +62,6 @@ export default function Checkout(): JSX.Element {
     setValue('expiryDate', formatted, { shouldValidate: true });
   };
 
-  // const onSubmit = () => {
-  //   setCheckoutLoading(true);
-
-  //   setTimeout(() => {
-  //     clearCart();
-  //     navigate('/checkout/success');
-  //     setCheckoutLoading(false);
-  //   }, 1200);
-  // };
-
   const handlePayment = (data: CheckoutFormData) => {
     setCheckoutLoading(true);
 
@@ -85,11 +75,15 @@ export default function Checkout(): JSX.Element {
   return (
     <form
       onSubmit={handleSubmit(handlePayment)}
-      className='max-w-7xl mx-auto p-8 mt-2 pb-20 grid grid-cols-1 md:grid-cols-3 gap-10 font-sans text-gray-900'
+      className='max-w-7xl mx-auto p-8 mt-2 pb-0 grid grid-cols-1 md:grid-cols-3 gap-10 font-sans text-gray-900'
       noValidate
+      aria-labelledby='checkout-heading'
     >
       <div className='md:col-span-2 space-y-8'>
-        <h1 className='text-2xl sm:text-4xl font-medium tracking-tight font-serif leading-tight'>
+        <h1
+          tabIndex={-1}
+          className='text-2xl sm:text-4xl font-medium tracking-tight font-serif leading-tight'
+        >
           Checkout
         </h1>
 
@@ -103,13 +97,19 @@ export default function Checkout(): JSX.Element {
               <input
                 type='text'
                 placeholder='Full Name'
+                aria-invalid={!!errors.fullName}
+                aria-describedby='fullName-error'
                 {...register('fullName')}
                 className={`w-full px-3 py-2.5 text-sm border rounded-lg bg-white transition
                   focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
                   ${errors.fullName ? 'border-red-500' : 'border-gray-200'}`}
               />
               {errors.fullName && (
-                <p className='text-xs text-red-500 mt-1'>
+                <p
+                  id='fullName-error'
+                  role='alert'
+                  className='text-xs text-red-500 mt-1'
+                >
                   {errors.fullName.message}
                 </p>
               )}
@@ -119,13 +119,19 @@ export default function Checkout(): JSX.Element {
               <input
                 type='email'
                 placeholder='Email'
+                aria-invalid={!!errors.email}
+                aria-describedby='email-error'
                 {...register('email')}
                 className={`w-full px-3 py-2.5 text-sm border rounded-lg bg-white transition
                   focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
                   ${errors.email ? 'border-red-500' : 'border-gray-200'}`}
               />
               {errors.email && (
-                <p className='text-xs text-red-500 mt-1'>
+                <p
+                  id='email-error'
+                  role='alert'
+                  className='text-xs text-red-500 mt-1'
+                >
                   {errors.email.message}
                 </p>
               )}
@@ -136,13 +142,19 @@ export default function Checkout(): JSX.Element {
             <input
               type='text'
               placeholder='Street Address'
+              aria-invalid={!!errors.street}
+              aria-describedby='street-error'
               {...register('street')}
               className={`w-full px-3 py-2.5 text-sm border rounded-lg bg-white transition
                 focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
                 ${errors.street ? 'border-red-500' : 'border-gray-200'}`}
             />
             {errors.street && (
-              <p className='text-xs text-red-500 mt-1'>
+              <p
+                id='street-error'
+                role='alert'
+                className='text-xs text-red-500 mt-1'
+              >
                 {errors.street.message}
               </p>
             )}
@@ -153,13 +165,19 @@ export default function Checkout(): JSX.Element {
               <input
                 type='text'
                 placeholder='City'
+                aria-invalid={!!errors.city}
+                aria-describedby='city-error'
                 {...register('city')}
                 className={`w-full px-3 py-2.5 text-sm border rounded-lg bg-white transition
                   focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
                   ${errors.city ? 'border-red-500' : 'border-gray-200'}`}
               />
               {errors.city && (
-                <p className='text-xs text-red-500 mt-1'>
+                <p
+                  id='city-error'
+                  role='alert'
+                  className='text-xs text-red-500 mt-1'
+                >
                   {errors.city.message}
                 </p>
               )}
@@ -170,6 +188,8 @@ export default function Checkout(): JSX.Element {
                 type='text'
                 placeholder='Postal Code'
                 maxLength={4}
+                aria-invalid={!!errors.postalCode}
+                aria-describedby='postalCode-error'
                 {...register('postalCode')}
                 onInput={(e: React.FormEvent<HTMLInputElement>) => {
                   e.currentTarget.value = e.currentTarget.value.replace(
@@ -182,7 +202,11 @@ export default function Checkout(): JSX.Element {
                   ${errors.postalCode ? 'border-red-500' : 'border-gray-200'}`}
               />
               {errors.postalCode && (
-                <p className='text-xs text-red-500 mt-1'>
+                <p
+                  id='postalCode-error'
+                  role='alert'
+                  className='text-xs text-red-500 mt-1'
+                >
                   {errors.postalCode.message}
                 </p>
               )}
@@ -192,6 +216,8 @@ export default function Checkout(): JSX.Element {
               <select
                 {...register('country')}
                 defaultValue=''
+                aria-invalid={!!errors.country}
+                aria-describedby='country-error'
                 className={`w-full px-3 py-2.5 text-sm border rounded-lg bg-white transition
                   focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
                   ${errors.country ? 'border-red-500' : 'border-gray-200'}`}
@@ -204,7 +230,11 @@ export default function Checkout(): JSX.Element {
                 <option value='France'>France</option>
               </select>
               {errors.country && (
-                <p className='text-xs text-red-500 mt-1'>
+                <p
+                  id='country-error'
+                  role='alert'
+                  className='text-xs text-red-500 mt-1'
+                >
                   {errors.country.message}
                 </p>
               )}
@@ -246,6 +276,8 @@ export default function Checkout(): JSX.Element {
             <input
               type='text'
               placeholder='Cardholder Name'
+              aria-invalid={!!errors.cardHolder}
+              aria-describedby='cardHolder-error'
               {...register('cardHolder')}
               className={`w-full px-3 py-2.5 text-sm border bg-white rounded-lg transition
                 focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10
@@ -256,6 +288,8 @@ export default function Checkout(): JSX.Element {
               type='text'
               placeholder='Card Number'
               maxLength={19}
+              aria-invalid={!!errors.cardNumber}
+              aria-describedby='cardNumber-error'
               value={cardNumber || ''}
               onChange={handleCardNumberChange}
               className={`w-full px-3 py-2.5 text-sm border bg-white rounded-lg transition
@@ -268,6 +302,8 @@ export default function Checkout(): JSX.Element {
                 type='text'
                 placeholder='Expiry Date (MM/YY)'
                 maxLength={5}
+                aria-invalid={!!errors.expiryDate}
+                aria-describedby='expiryDate-error'
                 value={expiryDate || ''}
                 onChange={(e) => handleExpiryChange(e.target.value)}
                 className={`w-full px-3 py-2.5 text-sm border bg-white rounded-lg transition
@@ -279,6 +315,8 @@ export default function Checkout(): JSX.Element {
                 type='text'
                 placeholder='CVC'
                 maxLength={3}
+                aria-invalid={!!errors.expiryDate}
+                aria-describedby='expiryDate-error'
                 {...register('cvc')}
                 onInput={(e: React.FormEvent<HTMLInputElement>) => {
                   e.currentTarget.value = e.currentTarget.value.replace(
@@ -304,7 +342,10 @@ export default function Checkout(): JSX.Element {
         </section>
       </div>
 
-      <aside className='bg-gray-100 backdrop-blur border border-gray-200 rounded-2xl p-6 mt-19 space-y-6 max-w-sm md:sticky md:top-25 self-start'>
+      <aside
+        aria-label='Order Summary'
+        className='bg-gray-100 backdrop-blur border border-gray-200 rounded-2xl p-6 mt-19 space-y-6 max-w-sm md:sticky md:top-25 self-start'
+      >
         <div className='flex items-center justify-between'>
           <h2 className='text-2xl font-light tracking-tight font-serif leading-tight'>
             Order Summary
