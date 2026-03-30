@@ -4,8 +4,9 @@ import { useProduct } from '../hooks/useProduct';
 import ProductDetailsLayout from '../components/layout/ProductDetailsLayout';
 import Breadcrumbs from '../components/layout/Breadcrumbs';
 import { Container } from '@mantine/core';
+import type { JSX } from 'react';
 
-export default function ProductDetailsPage() {
+export default function ProductDetailsPage(): JSX.Element {
   const { id } = useParams();
   const addToCart = useCartStore((state) => state.addToCart);
 

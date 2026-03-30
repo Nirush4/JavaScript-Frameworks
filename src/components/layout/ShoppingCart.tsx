@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { IconTrash, IconX } from '@tabler/icons-react';
 import { Loader, Rating } from '@mantine/core';
 import { calculateDiscountDetails } from '../../lib/utils/discount';
+import { toast } from 'react-toastify';
 
 interface CartDrawerProps {
   opened: boolean;
@@ -17,10 +18,17 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const totalPrice = useCartStore((state) => state.totalPrice);
   const clearCart = useCartStore((state) => state.clearCart);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  useEffect(() => {
+    document.body.style.overflow = opened ? 'hidden' : 'auto';
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [opened]);
 
   const handleContinueShopping = () => {
     navigate('/products');
@@ -37,13 +45,66 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
     }, 1200);
   };
 
-  useEffect(() => {
-    document.body.style.overflow = opened ? 'hidden' : 'auto';
+  const handleDecrease = (item: (typeof items)[number]) => {
+    if (item.quantity <= 1) {
+      removeFromCart(item.id);
 
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [opened]);
+      toast.info(`${item.title} removed from cart 🗑️`, {
+        position: 'top-right',
+        autoClose: 3000,
+        style: {
+          borderRadius: '10px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+          background: '#f6f6f4',
+          color: '#000000',
+          fontWeight: 'bold',
+          fontSize: '14px',
+        },
+        role: 'status',
+      });
+
+      return;
+    }
+
+    updateQuantity(item.id, item.quantity - 1);
+  };
+  const handleRemoveItem = (item: (typeof items)[number]) => {
+    removeFromCart(item.id);
+
+    toast.info(`${item.title} removed from cart 🗑️`, {
+      position: 'top-right',
+      autoClose: 3000,
+      style: {
+        borderRadius: '10px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+        background: '#f6f6f4',
+        color: '#000000',
+        fontWeight: 'bold',
+        fontSize: '14px',
+      },
+      role: 'status',
+    });
+  };
+
+  const handleClearCart = () => {
+    if (items.length === 0) return;
+
+    clearCart();
+
+    toast.success('Cart cleared successfully 🧹', {
+      position: 'top-right',
+      autoClose: 3000,
+      style: {
+        borderRadius: '10px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+        background: '#f6f6f4',
+        color: '#000000',
+        fontWeight: 'bold',
+        fontSize: '14px',
+      },
+      role: 'status',
+    });
+  };
 
   return (
     <>
@@ -55,7 +116,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
       />
 
       <div
-        className={`fixed top-0 right-0 h-screen w-full max-w-md bg-white z-[9999] shadow-xl 
+        className={`fixed top-0 right-0 h-screen w-full max-w-lg bg-white z-[9999] shadow-xl 
           transform transition-transform duration-300 flex flex-col
           ${opened ? 'translate-x-0' : 'translate-x-full'}`}
       >
@@ -151,9 +212,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                     <div className='flex flex-col items-end gap-4'>
                       <div className='flex items-center border rounded-md overflow-hidden'>
                         <button
-                          onClick={() =>
-                            updateQuantity(item.id, Math.max(item.quantity - 1))
-                          }
+                          onClick={() => handleDecrease(item)}
                           className='px-2 py-1 text-sm font-bold cursor-pointer'
                         >
                           −
@@ -174,7 +233,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
                       </div>
 
                       <div
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => handleRemoveItem(item)}
                         className='flex items-center gap-1 border text-sm rounded px-1 border-red-500 text-red-600 hover:bg-red-100 cursor-pointer'
                       >
                         <IconTrash size={14} />
@@ -200,7 +259,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
 
               <div className='space-y-2'>
                 <button
-                  onClick={clearCart}
+                  onClick={handleClearCart}
                   className='w-full border rounded-md py-2 hover:bg-gray-100 transition cursor-pointer'
                 >
                   Clear Cart

@@ -30,32 +30,21 @@ export default function ProductDetailsLayout({
   const handleAddToCart = () => {
     onAddToCart(quantity);
 
-    toast.success(`${product.title} (${quantity}) added to cart! 🛒`, {
+    toast.success(`${product.title} (${quantity}) added to cart!`, {
       position: 'top-right',
       autoClose: 3000,
-      style: {
-        borderRadius: '10px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-        background: '#f6f6f4',
-        color: '#000000',
-        fontWeight: 'bold',
-        fontSize: '14px',
-      },
+      role: 'status',
     });
   };
 
   return (
-    <section
-      className='py-2 md:py-7'
-      aria-labelledby='product-details-title'
-      role='region'
-    >
+    <section className='py-2 md:py-7' aria-labelledby='product-details-title'>
       <Container size='xl'>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-12'>
           <div>
             <img
               src={product.image.url}
-              alt={product.image.alt}
+              alt={product.image.alt || product.title}
               className='w-full h-80 sm:h-96 md:h-125 object-cover rounded-md'
             />
           </div>
@@ -78,23 +67,16 @@ export default function ProductDetailsLayout({
                 aria-label={`Rated ${product.rating} out of 5`}
               />
             ) : (
-              <div
-                className='mb-4 text-sm sm:text-base text-gray-500'
-                role='status'
-              >
+              <p className='mb-4 text-gray-600' role='status'>
                 No ratings yet
-              </div>
+              </p>
             )}
 
-            <div className='flex items-center gap-4 mb-3 flex-wrap'>
-              <span
-                className='text-xl sm:text-2xl font-bold text-red-500'
-                aria-label={`Price: ${finalPrice.toLocaleString('nb-NO', {
-                  style: 'currency',
-                  currency: 'NOK',
-                  minimumFractionDigits: 0,
-                })}`}
-              >
+            <div
+              className='flex items-center gap-4 mb-3 flex-wrap'
+              aria-describedby='price-description'
+            >
+              <span className='text-xl sm:text-2xl font-bold text-red-600'>
                 {finalPrice.toLocaleString('nb-NO', {
                   style: 'currency',
                   currency: 'NOK',
@@ -104,17 +86,7 @@ export default function ProductDetailsLayout({
 
               {hasDiscount && (
                 <>
-                  <span
-                    className='line-through text-black'
-                    aria-label={`Original price: ${product.price.toLocaleString(
-                      'nb-NO',
-                      {
-                        style: 'currency',
-                        currency: 'NOK',
-                        minimumFractionDigits: 0,
-                      }
-                    )}`}
-                  >
+                  <span className='line-through text-gray-700'>
                     {product.price.toLocaleString('nb-NO', {
                       style: 'currency',
                       currency: 'NOK',
@@ -122,17 +94,20 @@ export default function ProductDetailsLayout({
                     })}
                   </span>
 
-                  <span
-                    className='bg-green-500 text-white px-2 py-0.5 text-sm sm:text-base rounded'
-                    aria-label={`Discount: ${discountPercent}% off`}
-                  >
+                  <span className='bg-green-600 text-white px-2 py-0.5 rounded'>
                     -{discountPercent}%
                   </span>
                 </>
               )}
+
+              <span id='price-description' className='sr-only'>
+                {hasDiscount
+                  ? `Discounted price ${finalPrice}, originally ${product.price}`
+                  : `Price ${finalPrice}`}
+              </span>
             </div>
 
-            <p className='text-gray-600 mb-3 leading-relaxed'>
+            <p className='text-gray-700 mb-3 leading-relaxed'>
               {product.description}
             </p>
 
@@ -144,7 +119,7 @@ export default function ProductDetailsLayout({
                 {product.tags.map((tag: string) => (
                   <span
                     key={tag}
-                    className='text-xs bg-gray-500 text-white px-3 py-1 rounded-full'
+                    className='text-xs bg-gray-600 text-white px-3 py-1 rounded-full'
                   >
                     #{tag}
                   </span>
@@ -156,19 +131,25 @@ export default function ProductDetailsLayout({
               <label htmlFor='product-quantity' className='font-medium'>
                 Quantity:
               </label>
-              <div className='flex items-center border rounded-md overflow-hidden'>
+
+              <div
+                className='flex items-center border rounded-md overflow-hidden'
+                role='group'
+                aria-label='Select quantity'
+              >
                 <button
                   type='button'
                   onClick={() => handleQuantityChange(quantity - 1)}
                   disabled={quantity <= 1}
-                  className='px-3 py-1 hover:bg-gray-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition'
+                  className='px-3 py-1 cursor-pointer hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black'
                   aria-label='Decrease quantity'
                 >
                   −
                 </button>
 
                 <span
-                  className='px-4 font-semibold select-none'
+                  id='product-quantity'
+                  className='px-4 font-semibold'
                   aria-live='polite'
                 >
                   {quantity}
@@ -177,7 +158,7 @@ export default function ProductDetailsLayout({
                 <button
                   type='button'
                   onClick={() => handleQuantityChange(quantity + 1)}
-                  className='px-3 py-1 hover:bg-gray-100 transition cursor-pointer'
+                  className='px-3 py-1 cursor-pointer hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black'
                   aria-label='Increase quantity'
                 >
                   +
@@ -187,16 +168,20 @@ export default function ProductDetailsLayout({
 
             <button
               onClick={handleAddToCart}
-              className='w-full bg-black text-white py-2 sm:py-2 hover:bg-gray-700 transition text-sm sm:text-base cursor-pointer mb-6'
-              aria-label={`Add ${quantity} of ${product.title} to cart`}
+              className='w-full bg-black cursor-pointer text-white py-2 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition'
+              aria-describedby='add-to-cart-description'
             >
               Add to Cart
             </button>
 
-            <div aria-labelledby='product-reviews-title'>
+            <span id='add-to-cart-description' className='sr-only'>
+              Adds {quantity} of {product.title} to your shopping cart
+            </span>
+
+            <div aria-labelledby='product-reviews-title' className='mt-10'>
               <h2
                 id='product-reviews-title'
-                className='text-base sm:text-lg font-light mb-4 sm:mb-3'
+                className='text-base sm:text-lg font-light mb-4'
               >
                 Customer Reviews
               </h2>
@@ -204,16 +189,13 @@ export default function ProductDetailsLayout({
               {product.reviews && product.reviews.length > 0 ? (
                 <div className='space-y-6'>
                   {product.reviews.map((review) => (
-                    <div
+                    <article
                       key={review.id}
                       className='border-b pb-4'
-                      role='region'
                       aria-label={`Review by ${review.username}`}
                     >
                       <div className='flex items-center justify-between mb-2'>
-                        <strong className='text-sm sm:text-base'>
-                          {review.username}
-                        </strong>
+                        <strong>{review.username}</strong>
                         <Rating
                           value={review.rating}
                           readOnly
@@ -221,14 +203,12 @@ export default function ProductDetailsLayout({
                           aria-label={`Rated ${review.rating} out of 5`}
                         />
                       </div>
-                      <p className='text-gray-600 text-sm sm:text-base'>
-                        {review.description}
-                      </p>
-                    </div>
+                      <p className='text-gray-700'>{review.description}</p>
+                    </article>
                   ))}
                 </div>
               ) : (
-                <p className='text-gray-500' role='status'>
+                <p className='text-gray-600' role='status'>
                   No reviews yet. Be the first to review this product.
                 </p>
               )}
