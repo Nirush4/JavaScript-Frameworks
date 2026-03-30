@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { IconTrash, IconX } from '@tabler/icons-react';
 import { Loader, Rating } from '@mantine/core';
 import { calculateDiscountDetails } from '../../lib/utils/discount';
+import { toast } from 'react-toastify';
 
 interface CartDrawerProps {
   opened: boolean;
@@ -17,10 +18,17 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const totalPrice = useCartStore((state) => state.totalPrice);
   const clearCart = useCartStore((state) => state.clearCart);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  useEffect(() => {
+    document.body.style.overflow = opened ? 'hidden' : 'auto';
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [opened]);
 
   const handleContinueShopping = () => {
     navigate('/products');
@@ -37,13 +45,25 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
     }, 1200);
   };
 
-  useEffect(() => {
-    document.body.style.overflow = opened ? 'hidden' : 'auto';
+  const handleClearCart = () => {
+    if (items.length === 0) return;
 
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [opened]);
+    clearCart();
+
+    toast.success('Cart cleared successfully 🧹', {
+      position: 'top-right',
+      autoClose: 3000,
+      style: {
+        borderRadius: '10px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+        background: '#f6f6f4',
+        color: '#000000',
+        fontWeight: 'bold',
+        fontSize: '14px',
+      },
+      role: 'status',
+    });
+  };
 
   return (
     <>
@@ -200,7 +220,7 @@ export default function ShoppingCart({ opened, onClose }: CartDrawerProps) {
 
               <div className='space-y-2'>
                 <button
-                  onClick={clearCart}
+                  onClick={handleClearCart}
                   className='w-full border rounded-md py-2 hover:bg-gray-100 transition cursor-pointer'
                 >
                   Clear Cart
