@@ -7,7 +7,7 @@ export default function AboutPage(): JSX.Element {
   return (
     <main
       id='main-content'
-      className='bg-gray-50 pt-10'
+      className=' pt-10'
       aria-labelledby='about-page-title'
     >
       <Container size='xl'>
@@ -143,7 +143,7 @@ export default function AboutPage(): JSX.Element {
 
         <section
           aria-labelledby='cta-title'
-          className='max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-14 md:py-16 text-center'
+          className='max-w-5xl mx-auto px-4 sm:px-6 pt-12 sm:pt-14 md:pt-16 text-center'
         >
           <h2
             id='cta-title'

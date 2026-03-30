@@ -54,7 +54,7 @@ export default function Footer(): JSX.Element {
 
   return (
     <footer
-      className='bg-gray-50 py-10 border-t border-gray-200'
+      className='bg-gray-50 py-10 mt-10 sm:mt-20 border-t border-gray-200'
       aria-labelledby='footer-heading'
     >
       <h2 id='footer-heading' className='sr-only'>

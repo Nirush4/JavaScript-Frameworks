@@ -72,7 +72,7 @@ export default function ContactForm(): JSX.Element {
 
   return (
     <main aria-labelledby='contact-title'>
-      <Container size='xl' className='pt-10 pb-15'>
+      <Container size='xl' className='pt-10'>
         <nav aria-label='Breadcrumb'>
           <Breadcrumbs />
         </nav>

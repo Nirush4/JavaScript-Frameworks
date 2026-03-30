@@ -75,7 +75,7 @@ export default function Checkout(): JSX.Element {
   return (
     <form
       onSubmit={handleSubmit(handlePayment)}
-      className='max-w-7xl mx-auto p-8 mt-2 pb-20 grid grid-cols-1 md:grid-cols-3 gap-10 font-sans text-gray-900'
+      className='max-w-7xl mx-auto p-8 mt-2 pb-0 grid grid-cols-1 md:grid-cols-3 gap-10 font-sans text-gray-900'
       noValidate
       aria-labelledby='checkout-heading'
     >
