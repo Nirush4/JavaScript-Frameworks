@@ -8,7 +8,7 @@ export default function HeroSection(): JSX.Element {
       aria-describedby='hero-description'
       className='min-h-[90vh] grid grid-cols-1 md:grid-cols-2 bg-white'
     >
-      <div className='flex flex-col justify-center px-5 sm:px-10 lg:px-20 py-10 sm:py-16'>
+      <div className='flex flex-col justify-center pl-5 xl:pl-28 py-10 sm:py-16'>
         <span className='uppercase tracking-[0.25em] text-xs text-gray-600 mb-3'>
           New Collection 2026
         </span>
