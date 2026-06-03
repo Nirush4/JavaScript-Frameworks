@@ -3,17 +3,20 @@ import { useProducts } from '../../hooks/useProducts';
 import { Link } from 'react-router-dom';
 import type { JSX } from 'react';
 
+const BEST_SELLER_RATING = 4.5;
+const MAX_BEST_SELLERS = 4;
+
 export default function BestSellersSection(): JSX.Element {
   const { data, isLoading, isError } = useProducts(1);
 
-  const allProducts = data?.data || [];
+  const allProducts = data?.data ?? [];
 
   const bestSellers = allProducts
-    .filter((p) => p.rating >= 4.5)
+    .filter((product) => product.rating >= BEST_SELLER_RATING)
     .sort((a, b) => b.rating - a.rating)
-    .slice(0, 4);
+    .slice(0, MAX_BEST_SELLERS);
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <section
         className='py-32 bg-[#f6f6f4]'
@@ -27,8 +30,9 @@ export default function BestSellersSection(): JSX.Element {
         </Center>
       </section>
     );
+  }
 
-  if (isError)
+  if (isError) {
     return (
       <section
         className='py-32 bg-[#f6f6f4]'
@@ -40,11 +44,12 @@ export default function BestSellersSection(): JSX.Element {
         </Center>
       </section>
     );
+  }
 
   return (
     <section className='py-24 bg-white' aria-labelledby='best-sellers-title'>
       <Container size='xl'>
-        <div className='mb-16 text-center'>
+        <header className='mb-16 text-center'>
           <p className='text-sm sm:text-base tracking-[0.4em] uppercase text-neutral-600 font-medium'>
             Popular Now
           </p>
@@ -54,7 +59,7 @@ export default function BestSellersSection(): JSX.Element {
           >
             Best Sellers
           </h2>
-        </div>
+        </header>
 
         <ul
           className='grid gap-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
@@ -75,14 +80,13 @@ export default function BestSellersSection(): JSX.Element {
                 <div className='overflow-hidden'>
                   <img
                     src={product.image.url}
-                    alt={product.image.alt || product.title}
+                    alt={product.image.alt ?? product.title}
                     className='w-full h-40 sm:h-90 object-cover grayscale brightness-95 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700 ease-out'
                   />
                 </div>
 
                 <div className='mt-4 text-center'>
                   <h3 className='text-base text-black'>{product.title}</h3>
-
                   <p className='text-sm sm:text-base text-black mt-1 font-bold'>
                     <span className='sr-only'>Price: </span>
                     {Number(product.price).toLocaleString('nb-NO', {
