@@ -4,6 +4,16 @@
 
 This project is a fully functional online shop built using **React**, and **TypeScript**. It allows users to browse products, view details, search and sort items, manage a shopping cart, complete a checkout flow, and submit a validated contact form. The project emphasizes responsive design, clean user interface, and type-safe code.  
 
+## 📸 Preview
+<img width="1498" height="815" alt="image" src="https://github.com/user-attachments/assets/fba9c8e9-b21d-45be-9434-cb55f07b6492" />
+<img width="1498" height="828" alt="image" src="https://github.com/user-attachments/assets/0ffe460c-ea32-4a5b-843a-1e40ec981432" />
+<img width="1498" height="758" alt="image" src="https://github.com/user-attachments/assets/637df8f8-3eaf-48d2-aa54-86e918808d93" />
+<img width="1499" height="758" alt="image" src="https://github.com/user-attachments/assets/4081589c-6456-40c8-bbc1-f2e14b16c34b" />
+<img width="1499" height="829" alt="image" src="https://github.com/user-attachments/assets/71f20c82-1bee-4d99-86e9-b2c3d291e898" />
+
+
+
+
 ## Features
 
 - **Product Listing:** Browse all products in a user-friendly grid layout with images, titles, prices (original and discounted), ratings, and discount badges.
