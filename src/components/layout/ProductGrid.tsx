@@ -7,19 +7,19 @@ import ProductCardSkeleton from './ProductCardSkeleton';
 
 const ITEMS_PER_PAGE = 12;
 
-type sortList = 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc';
+type SortOption = 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc';
 
 function ProductsGridSkeleton(): JSX.Element {
+  const skeletonArray = Array.from({ length: ITEMS_PER_PAGE });
+
   return (
     <>
-      <div className='flex justify-end mb-6'>
-        <div className='w-40'>
-          <ProductCardSkeleton type='input' />
-        </div>
+      <div className='flex justify-end mb-6 w-40'>
+        <ProductCardSkeleton type='input' />
       </div>
 
       <div className='grid gap-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-        {Array.from({ length: 12 }).map((_, index) => (
+        {skeletonArray.map((_, index) => (
           <ProductCardSkeleton key={index} />
         ))}
       </div>
@@ -27,13 +27,13 @@ function ProductsGridSkeleton(): JSX.Element {
   );
 }
 
-export default function AllProductsSection() {
+export default function AllProductsSection(): JSX.Element {
   const [page, setPage] = useState(1);
-  const [sortOption, setSortOption] = useState<sortList>('price-asc');
+  const [sortOption, setSortOption] = useState<SortOption>('price-asc');
   const [searchParams] = useSearchParams();
 
-  const search = searchParams.get('search') || '';
-  const isSearching = search.trim().length > 0;
+  const searchQuery = searchParams.get('search')?.trim() ?? '';
+  const isSearching = searchQuery.length > 0;
 
   const { data, isLoading, isError } = useProducts(
     isSearching ? 1 : page,
@@ -46,15 +46,16 @@ export default function AllProductsSection() {
     let result = products;
 
     if (isSearching) {
+      const lowerSearch = searchQuery.toLowerCase();
       result = products.filter((product) =>
         [product.title, product.description, product.tags.join(' ')]
           .join(' ')
           .toLowerCase()
-          .includes(search.toLowerCase())
+          .includes(lowerSearch)
       );
     }
 
-    result = [...result].sort((a, b) => {
+    return [...result].sort((a, b) => {
       switch (sortOption) {
         case 'price-asc':
           return a.price - b.price;
@@ -68,13 +69,11 @@ export default function AllProductsSection() {
           return 0;
       }
     });
-
-    return result;
-  }, [data?.data, search, isSearching, sortOption]);
+  }, [data?.data, searchQuery, isSearching, sortOption]);
 
   const totalPages = isSearching
     ? Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)
-    : data?.meta?.pageCount || 1;
+    : data?.meta?.pageCount ?? 1;
 
   const paginatedProducts = isSearching
     ? filteredProducts.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
@@ -87,7 +86,7 @@ export default function AllProductsSection() {
       ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  if (isError)
+  if (isError) {
     return (
       <Center className='h-[50vh]'>
         <Text c='red' size='lg'>
@@ -95,10 +94,11 @@ export default function AllProductsSection() {
         </Text>
       </Center>
     );
+  }
 
   return (
     <section id='products-list' className='px-4 sm:px-8 max-w-338 mx-auto'>
-      <div className='mb-7 sm:mb-16 text-center'>
+      <header className='mb-7 sm:mb-16 text-center'>
         <p className='text-sm sm:text-base tracking-[0.4em] uppercase text-neutral-500 font-medium'>
           Explore
         </p>
@@ -106,7 +106,7 @@ export default function AllProductsSection() {
         <h2 className='text-2xl sm:text-4xl md:text-5xl font-light tracking-tight font-serif leading-tight'>
           All Products
         </h2>
-      </div>
+      </header>
 
       {isLoading ? (
         <ProductsGridSkeleton />
@@ -119,9 +119,13 @@ export default function AllProductsSection() {
           )}
 
           <div className='flex justify-end mb-6'>
+            <label htmlFor='sort-select' className='sr-only'>
+              Sort products
+            </label>
             <select
+              id='sort-select'
               value={sortOption}
-              onChange={(e) => setSortOption(e.target.value as sortList)}
+              onChange={(e) => setSortOption(e.target.value as SortOption)}
               className='border border-gray-300 rounded px-3 py-1'
             >
               <option value='price-asc'>Price: Low to High</option>
